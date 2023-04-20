@@ -1,7 +1,9 @@
+import MenuNavBar from '../menu-nav-bar';
+
 const Header = () => {
     return (
         <header>
-        <h1>My App header</h1>
+            <MenuNavBar />
         </header>
     );
 };

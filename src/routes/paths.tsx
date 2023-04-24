@@ -1,17 +1,25 @@
-import Home from "../pages/home/Home";
+import Home from "../pages/home";
+import SearchItems from "../pages/search-items/";
+import IPATH from '../services/pathService';
 
-interface IPath {
-    path: string;
-    exact: boolean;
-    component: React.FC;
-}
-
-const PATHS: IPath[] = [
+const PATHS: IPATH[] = [
     {
-        path:'/',
+        url:'/',
         exact: true,
         component: Home,
-    }
+    },
+    {
+        name:'home',
+        url:'/home',
+        exact: true,
+        component: Home,
+    },
+    {
+        name:'search items',
+        url:'/search-items',
+        exact: true,
+        component: SearchItems,
+    },
 ]
 
 export default PATHS;

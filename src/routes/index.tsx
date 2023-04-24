@@ -1,6 +1,5 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import NotFound from '../pages/not-found/NotFound';
+import NotFound from '../pages/not-found';
 import PATHS from './paths';
 
 const MainRoutes = () => {
@@ -12,7 +11,7 @@ const MainRoutes = () => {
                         return (
                             <Route
                                 key={index}
-                                path={path.path}
+                                path={path.url}
                                 element={<path.component />}
                             />
                         );

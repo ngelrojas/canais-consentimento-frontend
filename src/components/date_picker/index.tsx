@@ -21,8 +21,18 @@ export default function DateSPicker({handleDateInit, handleDateEnd}:any) {
     
     <LocalizationProvider dateAdapter={AdapterDayjs}>
         
-      <DatePicker slotProps={{textField: {size: 'small'} }} label="Date Init" onChange={handleChangeInit} />
-      <DatePicker slotProps={{textField: {size: 'small'}}} label="Data End" onChange={handleChangeEnd}/>
+      <DatePicker 
+        slotProps={{textField: {size: 'small'} }} 
+        label="Date Init" 
+        onChange={handleChangeInit}
+        
+      />
+      
+      <DatePicker 
+        slotProps={{textField: {size: 'small'}}} 
+        label="Data End" 
+        onChange={handleChangeEnd}
+      />
         
     </LocalizationProvider>
   );

@@ -3,8 +3,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // import { ContainerDatePicker } from './styled';
 
-
-
 export default function DateSPicker({handleDateInit, handleDateEnd}:any) {
 
   const handleChangeInit = (e: any) => {
@@ -27,7 +25,7 @@ export default function DateSPicker({handleDateInit, handleDateEnd}:any) {
         onChange={handleChangeInit}
         
       />
-      
+
       <DatePicker 
         slotProps={{textField: {size: 'small'}}} 
         label="Data End" 

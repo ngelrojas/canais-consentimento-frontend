@@ -1,37 +1,50 @@
+import { useState, useEffect } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { ContainerDatePicker } from './styled';
+import { DateOpt } from '../../services';
 
-export default function DateSPicker({handleDateInit, handleDateEnd}:any) {
 
-  const handleChangeInit = (e: any) => {
-    let date_init = e.$d.toISOString();
-    handleDateInit(date_init);
+export default function DateSPicker({handleSelectedDates}:any) {
+  const [fdate, setFdate] = useState<DateOpt>({
+    date_init: '',
+    date_end: ''
+  })
+
+  const handleChange = (e: any, type: string) => {
+    let date = e.$d.toISOString();
+    if (type === 'start') {
+      setFdate({...fdate, date_init: date})
+    } else {
+      setFdate({...fdate, date_end: date})
+    }
   }
-  
-  const handleChangeEnd = (e: any) => {
-    let date_end = e.$d.toISOString();
-    handleDateEnd(date_end);
-  }
+
+  useEffect(() => {
+
+    if (fdate.date_init && fdate.date_end) {
+      handleSelectedDates([{'init':fdate.date_init, 'end':fdate.date_end}]);
+    }
+  }, [fdate, handleSelectedDates]);
 
   return (
     
     <LocalizationProvider dateAdapter={AdapterDayjs}>
         
-      <DatePicker 
+      <DatePicker
         slotProps={{textField: {size: 'small'} }} 
         label="Date Init" 
-        onChange={handleChangeInit}
-        
+        onChange={(e)=>handleChange(e, 'start')}
       />
 
-      <DatePicker 
+      <DatePicker
         slotProps={{textField: {size: 'small'}}} 
         label="Data End" 
-        onChange={handleChangeEnd}
+        onChange={(e) => handleChange(e, 'end')}
       />
         
     </LocalizationProvider>
   );
 }
+
+

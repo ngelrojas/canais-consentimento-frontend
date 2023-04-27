@@ -1,6 +1,6 @@
 import Home from "../pages/home";
 import SearchItems from "../pages/search-items/";
-import IPATH from '../services/pathService';
+import { IPATH } from '../services';
 
 const PATHS: IPATH[] = [
     {

@@ -9,13 +9,25 @@ export default function DateSPicker({handleSelectedDates}:any) {
   const [fdate, setFdate] = useState<DateOpt>({
     date_init: '',
     date_end: ''
-  })
+  });
+  const [error, setError] = useState<any>({
+    date_error: ''
+  });
+
+  const handleError = (e:any) => {
+    if(e == 'invalidDate'){
+      setError({...error, date_error: 'data invalida'})
+      return;
+    }
+  }
 
   const handleChange = (e: any, type: string) => {
     let date = e.$d.toISOString();
     if (type === 'start') {
+      handleError(e);
       setFdate({...fdate, date_init: date})
     } else {
+      handleError(e);
       setFdate({...fdate, date_end: date})
     }
   }
@@ -32,16 +44,20 @@ export default function DateSPicker({handleSelectedDates}:any) {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
         
       <DatePicker
-        slotProps={{textField: {size: 'small'} }} 
+        slotProps={{textField: {size: 'small'}}} 
         label="Date Init" 
         onChange={(e)=>handleChange(e, 'start')}
+        onError={handleError}
       />
+      <span>{error.date_error}</span>
 
       <DatePicker
         slotProps={{textField: {size: 'small'}}} 
         label="Data End" 
         onChange={(e) => handleChange(e, 'end')}
+        onError={handleError}
       />
+      <span>{error.date_error}</span>
         
     </LocalizationProvider>
   );

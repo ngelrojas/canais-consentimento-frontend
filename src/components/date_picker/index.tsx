@@ -1,43 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DateOpt } from '../../services';
+import { DateOpt, ErrorState, DateSPickerProps } from '../../services';
+import { MsgError } from './styled';
 
-
-export default function DateSPicker({handleSelectedDates}:any) {
-  const [fdate, setFdate] = useState<DateOpt>({
-    date_init: '',
-    date_end: ''
-  });
-  const [error, setError] = useState<any>({
-    date_error: ''
+export default function DateSPicker({handleSelectedDates}: DateSPickerProps) {
+  const [state, setState] = useState<{ Fdate: DateOpt; error: ErrorState }>({
+    Fdate: { date_init: "", date_end: "" },
+    error: { date_error: "" },
   });
 
-  const handleError = (e:any) => {
-    if(e == 'invalidDate'){
-      setError({...error, date_error: 'data invalida'})
+  const handleError = useCallback((e: any) => {
+    if (e == "invalidDate") {
+      setState((prevState) => ({ ...prevState, error: { date_error: "data invalida" } }));
       return;
     }
-  }
-
-  const handleChange = (e: any, type: string) => {
+  }, []);
+  
+  const handleChange = useCallback((e: any, type: string) => {
     let date = e.$d.toISOString();
-    if (type === 'start') {
+    if (type === "start") {
       handleError(e);
-      setFdate({...fdate, date_init: date})
+      setState((prevState) => ({ ...prevState, Fdate: { ...prevState.Fdate, date_init: date } }));
     } else {
       handleError(e);
-      setFdate({...fdate, date_end: date})
+      setState((prevState) => ({ ...prevState, Fdate: { ...prevState.Fdate, date_end: date } }));
     }
-  }
+  }, [handleError]);
 
   useEffect(() => {
-
-    if (fdate.date_init && fdate.date_end) {
-      handleSelectedDates([{'init':fdate.date_init, 'end':fdate.date_end}]);
+    if (state.Fdate.date_init && state.Fdate.date_end) {
+      handleSelectedDates([{ init: state.Fdate.date_init, end: state.Fdate.date_end }]);
     }
-  }, [fdate, handleSelectedDates]);
+  }, [state.Fdate, handleSelectedDates]);
 
   return (
     
@@ -49,7 +45,7 @@ export default function DateSPicker({handleSelectedDates}:any) {
         onChange={(e)=>handleChange(e, 'start')}
         onError={handleError}
       />
-      <span>{error.date_error}</span>
+      <MsgError>{state.error.date_error}</MsgError>
 
       <DatePicker
         slotProps={{textField: {size: 'small'}}} 
@@ -57,7 +53,7 @@ export default function DateSPicker({handleSelectedDates}:any) {
         onChange={(e) => handleChange(e, 'end')}
         onError={handleError}
       />
-      <span>{error.date_error}</span>
+      <MsgError>{state.error.date_error}</MsgError>
         
     </LocalizationProvider>
   );

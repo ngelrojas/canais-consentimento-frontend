@@ -6,3 +6,7 @@ export const ContainerDatePicker = styled.div`
     border-radius: 5px;
     height: 30px;
 `;
+
+export const MsgError = styled.span`
+    color: red;
+`;

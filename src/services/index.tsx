@@ -20,3 +20,16 @@ export interface MaskState {
     textmask: string;
     numberformat: string;
 }
+
+export interface MsgError{
+    errorTxt: string
+    errorBool: boolean
+}
+
+export interface ErrorState{
+    date_error: string
+}
+
+export interface DateSPickerProps{
+    handleSelectedDates: (dates: Array<{init: string; end: string}>) => void;
+  }

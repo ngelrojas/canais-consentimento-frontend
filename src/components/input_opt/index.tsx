@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import  MaskCustom  from './mask_opt';
-import { MaskState } from '../../services';
+import { MaskState, MsgError } from '../../services';
+import { cpf as cpfValidator, cnpj as cnpjValidator } from 'cpf-cnpj-validator';
 
 
 export default function InputOpt({handleInput}:any) {
@@ -11,13 +12,43 @@ export default function InputOpt({handleInput}:any) {
     textmask: '',
     numberformat: '',
   });
+  const [msgError, setMsgError] = useState<MsgError>({
+    errorTxt: '',
+    errorBool: false
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     setValues({
       ...values,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
-    handleInput(values)
+    handleInput(values);
+  };
+
+  const isCpfCnpjValid = (value: string) => {
+    const onlyNumbers = value.replace(/\D/g, '');
+    console.log('cpf', onlyNumbers.length);
+    if (onlyNumbers.length === 11) {
+      return cpfValidator.isValid(onlyNumbers);
+    } else if (onlyNumbers.length === 14) {
+      return cnpjValidator.isValid(onlyNumbers);
+    }
+    return false;
+  };
+
+  const handleCpfCnpjChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+    if (isCpfCnpjValid(value)) {
+      setMsgError({...msgError, errorTxt: '', errorBool: false});
+    } else {
+      setMsgError({...msgError, errorTxt: 'CPF/CNPJ inválido', errorBool: true});
+    }
+    handleInput(values);
   };
 
   return (
@@ -30,18 +61,15 @@ export default function InputOpt({handleInput}:any) {
       }}
     >
       <FormControl variant="standard">
-        
         <TextField
             label="CPF/CNPJ"
             value={values.textmask}
-            onChange={handleChange}
+            onChange={handleCpfCnpjChange}
             name="textmask"
             id="cpf-cnpj-opt"
-            InputProps={{
-                inputComponent: MaskCustom as any,
-                inputProps: { mask: '000.000.000-00' },
-            }}
+            error={msgError.errorBool}
         />
+        <span>{msgError.errorTxt}</span>
       </FormControl>
 
       <FormControl variant="standard">  
@@ -55,6 +83,7 @@ export default function InputOpt({handleInput}:any) {
                 inputComponent: MaskCustom as any,
                 inputProps: { mask: '(00)000-000-000' },
             }}
+            // error={msgError.errorBool}
         />
       </FormControl>
       

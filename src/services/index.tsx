@@ -32,4 +32,5 @@ export interface ErrorState{
 
 export interface DateSPickerProps{
     handleSelectedDates: (dates: Array<{init: string; end: string}>) => void;
+    handleErrors?: (error: string) => void;
   }

@@ -10,27 +10,35 @@ export interface DateOpt{
     date_end: string
 }
 
-export interface MaskProps {
-    onChange: (event: { target: { name: string; value: string } }) => void;
-    name: string;
-    mask: string;
-}
-
-export interface MaskState {
+export interface DataOpt {
     textmask: string;
     numberformat: string;
 }
 
-export interface MsgError{
-    errorTxt: string
-    errorBool: boolean
+export interface ErrorDate{
+    date_init_error?: string;
+    date_end_error?: string;
+    date_90_error?: string;
 }
 
-export interface ErrorState{
-    date_error: string
+// export interface DateSPickerProps{
+//     handleSelectedDates: (dates: Array<{init: string; end: string}>) => void;
+//     handleErrors?: (error: string) => void;
+// }
+
+export interface ErrorPhone{
+    phone_error: string;
+    error: boolean;
 }
 
-export interface DateSPickerProps{
-    handleSelectedDates: (dates: Array<{init: string; end: string}>) => void;
-    handleErrors?: (error: string) => void;
-  }
+export interface ErrorCpfCnpj{
+    cpf_cnpj_error: string;
+    error: boolean;
+}
+
+export interface DataSubmit {
+    cpf_cnpj: string;
+    telefone: string;
+    date_init: string;
+    date_end: string;
+}

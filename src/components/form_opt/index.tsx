@@ -1,70 +1,56 @@
 import { useState, useCallback } from 'react';
 import BasicButtons from "../../components/button";
-// import Stack from '@mui/material/Stack';
-// import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
-// import DateSPicker from "../../components/date_picker";
-// import InputOpt from '../input_opt';
-import { DateOpt, MaskState, MsgError } from '../../services';
+import { DateOpt, DataOpt, 
+  ErrorPhone, ErrorCpfCnpj, ErrorDate, DataSubmit } from '../../services';
 import TextField from '@mui/material/TextField';
 import  MaskCustom  from '../../components/input_opt/mask_opt';
-import { cpf as cpfValidator, cnpj as cnpjValidator } from 'cpf-cnpj-validator';
-// import { ButtonBase } from '@mui/material';
-
+import { isWithin90Days, FormatPhone, isCpfCnpjValid } from '../../utils';
 export default function FormOpt () {
-    const [sendData, setSendData] = useState<{Ddate: DateOpt, Tdata: MaskState}>({
-        Ddate: {date_init: '', date_end: ''},
-        Tdata: {textmask: '', numberformat: ''}
-    });    
-
-    const [msgError, setMsgError] = useState<MsgError>({
-      errorTxt: '',
-      errorBool: false
+    const [sendData, setSendData] = useState<{dateOpt: DateOpt, dataOpt: DataOpt, errorDate: ErrorDate}>({
+        dateOpt: {date_init: '', date_end: ''},
+        dataOpt: {textmask: '', numberformat: ''},
+        errorDate: {date_init_error: '', date_end_error: '', date_90_error: ''},
     });
 
-    const handleChange = (event: any) => {
-      
-      setSendData((prevState) => ({ ...prevState, Tdata: { ...prevState.Tdata, numberformat: event.target.value } }));
-    };
+    const [errors, setErrors] = useState<{cpfCnpjE: ErrorCpfCnpj, phoneE: ErrorPhone}>({
+      cpfCnpjE: {cpf_cnpj_error: '', error: false},
+      phoneE: {phone_error: '', error: false}
+    })
 
-    const isCpfCnpjValid = (value: string) => {
-      const onlyNumbers = value.replace(/\D/g, '');
+    const IsTelefone = (phone_number: any, phone_number_unformat: any) => {
+      let p_number = phone_number.length > 0 && phone_number.length <= 11 ? phone_number_unformat : '';
+      setSendData((prevState) => ({ ...prevState, dataOpt: { ...prevState.dataOpt, numberformat: p_number }}));
       
-      if (onlyNumbers.length === 11) {
-        return cpfValidator.isValid(onlyNumbers);
-      } else if (onlyNumbers.length === 14) {
-        return cnpjValidator.isValid(onlyNumbers);
-      }
-      return false;
-    };
-    
-    const handleCpfCnpjChange = (event: any) => {
-      
-      setSendData((prevState) => ({ ...prevState, Tdata: { ...prevState.Tdata, textmask: event.target.value } }));
-      if (isCpfCnpjValid(event.target.value)) {
-        setMsgError({...msgError, errorTxt: '', errorBool: false});
-      } else {
-        setMsgError({...msgError, errorTxt: 'CPF/CNPJ inválido', errorBool: true});
-      }
-    };
+      let p_number_error = p_number ? '' : 'Telefono inválido';
+      let p_number_bool = p_number ? false : true;
+      setErrors((prevState) => ({ ...prevState, phoneE: { ...prevState.phoneE, phone_error: p_number_error, error: p_number_bool } }));
 
-    const handleChangeT = (event: React.ChangeEvent<HTMLInputElement>) => {
-      console.log('event for both data => ', event.target.name);
-      // save data CPF/CNPJ
-      if(event.target.name == 'textmask'){
-        handleCpfCnpjChange(event);
-      } 
-
-      if(event.target.name == 'numberformat'){
-        handleChange(event);
-      }
-      // save data PHONE
     }
+
+    const handleTelefone = (event: React.ChangeEvent<HTMLInputElement>) => {
+      let phone_number_unformat = event.target.value;
+      let phone_number = FormatPhone(event.target.value);
+      IsTelefone(phone_number, phone_number_unformat);
+    };
+    // TODO: Refactor this function
+    const IsCpjCnpj = (event: any) => {
+      if (isCpfCnpjValid(event)) {
+        setErrors((prevState) => ({ ...prevState, cpfCnpjE: { ...prevState.cpfCnpjE, cpf_cnpj_error: '', error: false } }));
+      } else {
+        setErrors((prevState) => ({ ...prevState, cpfCnpjE: { ...prevState.cpfCnpjE, cpf_cnpj_error: 'CPF/CNPJ inválido', error: true } }));
+      }
+    }
+    
+    const handleCpfCnpj = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSendData((prevState) => ({ ...prevState, dataOpt: { ...prevState.dataOpt, textmask: event.target.value } }));
+      IsCpjCnpj(event.target.value);
+    };
 
     const handleChangeD = useCallback((e: any, type: string) => {
         try{
@@ -72,30 +58,36 @@ export default function FormOpt () {
           let date = e.$d.toISOString();
           
           if (type === "start") {
-            setSendData((prevState) => ({ ...prevState, Ddate: { ...prevState.Ddate, date_init: date } }));
-            setSendData((prevState) => ({ ...prevState, error: { date_error: '' } }));
+            setSendData((prevState) => ({ ...prevState, dateOpt: { ...prevState.dateOpt, date_init: date } }));
+            setSendData((prevState) => ({ ...prevState, errorDate: { date_init_error: '', date_end_error: '' } }));
           } else {
-            setSendData((prevState) => ({ ...prevState, Ddate: { ...prevState.Ddate, date_end: date } }));
-            setSendData((prevState) => ({ ...prevState, error: { date_error: '' } }));
+            setSendData((prevState) => ({ ...prevState, dateOpt: { ...prevState.dateOpt, date_end: date } }));
+            setSendData((prevState) => ({ ...prevState, errorDate: { date_init_error: '', date_end_error: '' } }));
           }
         }catch(e: any){
-          setSendData((prevState) => ({ ...prevState, error: { date_error: e?.message } }));
-        //   handleDataErrors(e?.message);
+          setSendData((prevState) => ({ ...prevState, errorDate: { date_init_error: e?.message, date_end_error: e?.message } }));
         }
       }, []);
 
     const handleSubmit = (data: any) => {
       data.preventDefault();
-      console.log('handle submit => ',sendData);
-      const { Ddate, Tdata } = sendData;
+      const { dateOpt, dataOpt } = sendData;
       const { isValid, errorMessages } = validateInputs(
-        Ddate.date_init,
-        Ddate.date_end,
-        Tdata.textmask,
-        Tdata.numberformat
+        dateOpt.date_init,
+        dateOpt.date_end,
+        dataOpt.textmask,
+        dataOpt.numberformat
       );
       if (isValid) {
         console.log("Form data is valid, submitting...");
+        let formatPhone = FormatPhone(dataOpt.numberformat);
+        const dataSubmit: DataSubmit = {
+          date_init: dateOpt.date_init,
+          date_end: dateOpt.date_end,
+          cpf_cnpj: dataOpt.textmask,
+          telefone: formatPhone,
+        };
+        console.log('data submit => ', dataSubmit);
         // Do something here to submit the form
       } else {
         console.log("Form data is invalid, please fix the errors:");
@@ -103,28 +95,38 @@ export default function FormOpt () {
       }
     };
     
-    
     const validateInputs = (date_init: string, date_end: string, cpf_cnpj: string, telefone: string) => {
       let isValid = true;
       let errorMessages: string[] = [];
-      console.log('data init', date_init);
+
       // Validate DATE_INIT and DATE_END
       if (!date_init.trim()) {
         errorMessages.push("Date Init is required");
+        // setSendData((prevState) => ({ ...prevState, errorDate: { date_error: 'Date Init is required' } }));
+        setSendData((prevState) => ({ ...prevState, errorDate: { date_init_error: errorMessages[0], date_end_error: errorMessages[1] } }));
         isValid = false;
       }
       if (!date_end.trim()) {
         errorMessages.push("Date End is required");
+        setSendData((prevState) => ({ ...prevState, errorDate: { date_init_error: errorMessages[0], date_end_error: errorMessages[1] } }));
+        // setSendData((prevState) => ({ ...prevState, errorDate: { date_error: 'Date End is required' } }));
         isValid = false;
       }
       if (date_init && date_end && new Date(date_end) < new Date(date_init)) {
         errorMessages.push("Date End should not be less than Date Init");
+        setSendData((prevState) => ({ ...prevState, errorDate: { date_90_error: errorMessages[0] } }));
+        isValid = false;
+      }
+      if(date_init && date_end && !isWithin90Days(new Date(date_init), new Date(date_end))){
+        errorMessages.push("Date End should not be more than 90 days from Date Init");
+        setSendData((prevState) => ({ ...prevState, errorDate: { date_90_error: errorMessages[0] } }));
         isValid = false;
       }
     
       // Validate CPF/CNPJ
       if (!cpf_cnpj.trim()) {
         errorMessages.push("CPF/CNPJ is required");
+        IsCpjCnpj('');
         isValid = false;
       }
       if (cpf_cnpj && !isCpfCnpjValid(cpf_cnpj)) {
@@ -135,9 +137,9 @@ export default function FormOpt () {
       // Validate TELEFONE
       if (!telefone.trim()) {
         errorMessages.push("Telefone is required");
+        IsTelefone('','');
         isValid = false;
       }
-      // You can add your own validation logic for telefone here
       
       return { isValid, errorMessages };
     }
@@ -151,52 +153,52 @@ export default function FormOpt () {
                         <form onSubmit={handleSubmit} method='post'>
                             
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-      
-                                <FormControl variant="standard">
-                                    <DatePicker
-                                    slotProps={{textField: {size: 'small'}}} 
-                                    label="Date Init" 
-                                    onChange={(e)=>handleChangeD(e, 'start')}
-                                    // onError={(e) => handleDataErrors(e?.message)}
-                                    />
-                                    {/* <MsgError>{state.error.date_error}</MsgError> */}
-                                </FormControl>    
-
-                                <FormControl variant="standard">
-                                    <DatePicker
-                                    slotProps={{textField: {size: 'small'}}} 
-                                    label="Data End" 
-                                    onChange={(e) => handleChangeD(e, 'end')}
-                                    />
-                                    {/* <MsgError>{state.error.date_error}</MsgError> */}
-                                </FormControl>
-                                    
+                            
+                              <FormControl variant="standard">
+                                  <DatePicker
+                                  slotProps={{textField: {size: 'small'}}} 
+                                  label="Date Init" 
+                                  onChange={(e)=>handleChangeD(e, 'start')}
+                                  />
+                                  <span>{sendData.errorDate.date_init_error}</span>
+                              </FormControl>    
+                              <FormControl variant="standard">
+                                  <DatePicker
+                                  slotProps={{textField: {size: 'small'}}} 
+                                  label="Data End" 
+                                  onChange={(e) => handleChangeD(e, 'end')}
+                                  />
+                                  <span>{sendData.errorDate.date_end_error}</span>
+                              </FormControl>
+                              <span>{sendData.errorDate.date_90_error}</span>     
                             </LocalizationProvider>
+
                             <FormControl variant="standard">
                                 <TextField
                                     label="CPF/CNPJ"
-                                    value={sendData.Tdata.textmask}
-                                    onChange={handleChangeT}
+                                    value={sendData.dataOpt.textmask}
+                                    onChange={handleCpfCnpj}
                                     name="textmask"
                                     id="cpf-cnpj-opt"
-                                    error={msgError.errorBool}
+                                    error={errors.cpfCnpjE.error}
                                 />
-                                <span>{msgError.errorTxt}</span>
+                                <span>{errors.cpfCnpjE.cpf_cnpj_error}</span>
                             </FormControl>
 
                             <FormControl variant="standard">  
                                 <TextField
                                     label="TELEFONE"
-                                    value={sendData.Tdata.numberformat}
-                                    onChange={handleChangeT}
+                                    value={sendData.dataOpt.numberformat}
+                                    onChange={handleTelefone}
                                     name="numberformat"
                                     id="telefone-opt"
                                     InputProps={{
                                         inputComponent: MaskCustom as any,
                                         inputProps: { mask: '(00)000-000-000' },
                                     }}
-                                    // error={msgError.errorBool}
+                                    error={errors.phoneE.error}
                                 />
+                                <span>{errors.phoneE.phone_error}</span>
                             </FormControl>
                             
                             <BasicButtons />

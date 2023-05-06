@@ -36,9 +36,25 @@ export interface ErrorCpfCnpj{
     error: boolean;
 }
 
+export interface DateSubmit {
+    date_init: string;
+    date_end: string;    
+}
+
 export interface DataSubmit {
     cpf_cnpj: string;
-    telefone: string;
+    telephone: string;
     date_init: string;
     date_end: string;
+}
+
+export interface ConstErrorMsg {
+    readonly date_init_error: string;
+    readonly date_end_error: string;
+    readonly date_between_error: string;
+    readonly date_90_error: string;
+    readonly cpf_cnpj_required: string;
+    readonly cpf_cnpj_invalid: string;
+    readonly phone_error: string;
+    readonly msg_bool: boolean;
 }

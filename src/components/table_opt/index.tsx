@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -21,45 +23,36 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Autocomplete from '@mui/material/Autocomplete';
+
 interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
+  CpfCnpj: string,
+  Telefone: string,
+  dataAtualizacao: string,
+  dataCriacao: string,
+  SistemaOrigem: string,
+  inOptInOut: string,
 }
 
 function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
+  CpfCnpj: string,
+  Telefone: string,
+  dataAtualizacao: string,
+  dataCriacao: string,
+  SistemaOrigem: string,
+  inOptInOut: string,
 ): Data {
   return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
+    CpfCnpj,
+    Telefone,
+    dataAtualizacao,
+    dataCriacao,
+    SistemaOrigem,
+    inOptInOut,
   };
 }
-
-const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
-];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -85,10 +78,6 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
@@ -110,34 +99,40 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'name',
+    id: 'CpfCnpj',
     numeric: false,
     disablePadding: true,
-    label: 'Dessert (100g serving)',
+    label: 'CPF/CNPJ',
   },
   {
-    id: 'calories',
+    id: 'Telefone',
     numeric: true,
     disablePadding: false,
-    label: 'Calories',
+    label: 'Telefone',
   },
   {
-    id: 'fat',
+    id: 'dataAtualizacao',
     numeric: true,
     disablePadding: false,
-    label: 'Fat (g)',
+    label: 'Ultima Atualização',
   },
   {
-    id: 'carbs',
+    id: 'dataCriacao',
     numeric: true,
     disablePadding: false,
-    label: 'Carbs (g)',
+    label: 'Primeiro Consentimento',
   },
   {
-    id: 'protein',
+    id: 'SistemaOrigem',
     numeric: true,
     disablePadding: false,
-    label: 'Protein (g)',
+    label: 'Canal',
+  },
+  {
+    id: 'inOptInOut ',
+    numeric: true,
+    disablePadding: false,
+    label: 'Opção',
   },
 ];
 
@@ -205,6 +200,7 @@ interface EnhancedTableToolbarProps {
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const { numSelected } = props;
 
+
   return (
     <Toolbar
       sx={{
@@ -232,7 +228,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          
         </Typography>
       )}
       {numSelected > 0 ? (
@@ -254,11 +250,19 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('CpfCnpj');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [canais, setCanais] = useState<Data[]>([]);
+
+  const fetchCanais = async () => {
+    const response = await axios.get('http://localhost:3001/canais');
+    setCanais(response.data);
+    // console.log(response.data);
+  }
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -270,20 +274,22 @@ export default function EnhancedTable() {
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
+      const newSelected = canais.map((n) => n.CpfCnpj);
+
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event: React.MouseEvent<unknown>, cpf_cnpj: string) => {
+    const selectedIndex = selected.indexOf(cpf_cnpj);
     let newSelected: readonly string[] = [];
-
+    
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, cpf_cnpj);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -315,19 +321,41 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - canais.length) : 0;
+    const [visibleRows, setVisibleRows] = useState(canais);
 
-  const visibleRows = React.useMemo(
-    () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [order, orderBy, page, rowsPerPage],
-  );
+  const handleSearch = (searchVal: React.ChangeEvent<HTMLInputElement>) => {
+    const value = searchVal.target.value.toString();
+    if(value === '') {
+      fetchCanais();
+    }else{
+      const filteredRows = visibleRows.filter((row: any) => {
+        return row.CpfCnpj.toString().includes(value) || row.Telefone.toString().includes(value);
+      })
+      setVisibleRows(filteredRows);
+      setCanais(filteredRows);
+    }
+    
+  }
+  
+  useEffect(() => {
+    fetchCanais();
+  }, []);
+  
+  useEffect(() => {
+    
+    setVisibleRows(stableSort(canais, getComparator(order, orderBy)).slice(
+      page * rowsPerPage,
+      page * rowsPerPage + rowsPerPage,
+    ));
+  }, [canais, order, orderBy, page, rowsPerPage]);
+
 
   return (
     <Box sx={{ width: '100%' }}>
+      <Stack spacing={2} sx={{ width: 300 }}>
+        <TextField onChange={handleSearch} />
+      </Stack>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -342,21 +370,21 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={canais.length}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.name);
+              {visibleRows.map((canal, index) => {
+                const isItemSelected = isSelected(canal.CpfCnpj);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.name)}
+                    onClick={(event) => handleClick(event, canal.CpfCnpj)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.name}
+                    key={canal.CpfCnpj}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
@@ -375,12 +403,13 @@ export default function EnhancedTable() {
                       scope="row"
                       padding="none"
                     >
-                      {row.name}
+                      {canal.CpfCnpj}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    <TableCell align="right">{canal.Telefone}</TableCell>
+                    <TableCell align="right">{canal.dataAtualizacao}</TableCell>
+                    <TableCell align="right">{canal.dataCriacao}</TableCell>
+                    <TableCell align="right">{canal.SistemaOrigem}</TableCell>
+                    <TableCell align="right">{canal.inOptInOut ? "true": "false"}</TableCell>
                   </TableRow>
                 );
               })}
@@ -399,7 +428,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={canais.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

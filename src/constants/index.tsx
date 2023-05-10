@@ -1,4 +1,4 @@
-import { ConstErrorMsg } from "../services";
+import { ConstErrorMsg, HeadCell } from "../services";
 
 export const MSG_ERRORS:ConstErrorMsg = {
     date_init_error: 'data init is required',
@@ -10,3 +10,44 @@ export const MSG_ERRORS:ConstErrorMsg = {
     phone_error: 'Phone is required',
     msg_bool: true
 }
+
+export const HEADCELLS: readonly HeadCell[] =[
+    {
+        id: 'CpfCnpj',
+        numeric: false,
+        disablePadding: true,
+        label: 'CPF/CNPJ',
+    },
+    {
+        id: 'Telefone',
+        numeric: true,
+        disablePadding: false,
+        label: 'Telefone',
+    },
+    {
+        id: 'dataAtualizacao',
+        numeric: true,
+        disablePadding: false,
+        label: 'Ultima Atualização',
+    },
+    {
+        id: 'dataCriacao',
+        numeric: true,
+        disablePadding: false,
+        label: 'Primeiro Consentimento',
+    },
+    {
+        id: 'SistemaOrigem',
+        numeric: true,
+        disablePadding: false,
+        label: 'Canal',
+    },
+    {
+        id: 'inOptInOut',
+        numeric: true,
+        disablePadding: false,
+        label: 'Opção',
+    },
+]
+
+export type Order = 'asc' | 'desc';

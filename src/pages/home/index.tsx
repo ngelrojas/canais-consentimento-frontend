@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
-import FormOpt from '../../components/form_opt';
-import EnhancedTable from '../../components/table_opt';
+import FormOpt from '../../components/formOpt';
+import EnhancedTable from '../../components/tableOpt';
 
 export default function Home () {
     
@@ -12,11 +12,11 @@ export default function Home () {
                 <Grid container>
                     <Grid xs={12}>
                         
-                        <Grid xs={6}>
+                        <Grid xs={12}>
                             <FormOpt />      
                         </Grid>
-
-                        <Grid xs={6}>
+                        <br />
+                        <Grid xs={12}>
                             <EnhancedTable />
                         </Grid>
 

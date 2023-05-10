@@ -9,13 +9,13 @@ const PATHS: IPATH[] = [
         component: Home,
     },
     {
-        name:'home',
+        name:'Importar',
         url:'/home',
         exact: true,
         component: Home,
     },
     {
-        name:'search items',
+        name:'Exportar',
         url:'/search-items',
         exact: true,
         component: SearchItems,

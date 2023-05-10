@@ -1,3 +1,5 @@
+import { Order } from "../constants";
+
 export interface IPATH {
     name?: string;
     url: string;
@@ -57,4 +59,33 @@ export interface ConstErrorMsg {
     readonly cpf_cnpj_invalid: string;
     readonly phone_error: string;
     readonly msg_bool: boolean;
+}
+
+export interface DataCanais {
+    CpfCnpj: string,
+    Telefone: string,
+    dataAtualizacao: string,
+    dataCriacao: string,
+    SistemaOrigem: string,
+    inOptInOut: string,
+}
+
+export interface HeadCell {
+    disablePadding: boolean;
+    id: keyof DataCanais;
+    label: string;
+    numeric: boolean;
+}
+
+export interface EnhancedTableProps {
+    numSelected: number;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof DataCanais) => void;
+    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    order: Order;
+    orderBy: string;
+    rowCount: number;
+  }
+
+export interface EnhancedTableToolbarProps {
+    numSelected: number;
 }

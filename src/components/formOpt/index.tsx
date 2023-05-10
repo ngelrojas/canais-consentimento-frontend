@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import BasicButtons from "../../components/button";
+import BasicButtons from "../button";
 import FormControl from '@mui/material/FormControl';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,10 +12,11 @@ import {
   ErrorDate, DataSubmit
 } from '../../services';
 import TextField from '@mui/material/TextField';
-import  MaskCustom  from '../../components/input_opt/mask_opt';
+import  MaskCustom  from '../inputOpt/mask_opt';
 import { isWithin90Days, FormatPhone, FormatCpfCnpj, isCpfCnpjValid, isTelephone } from '../../utils';
 import { MSG_ERRORS } from '../../constants';
-import ComDatePicker from '../date_picker';
+import ComDatePicker from '../datePicker';
+
 export default function FormOpt () {
     const [sendData, setSendData] = useState<{dateOpt: DateOpt, dataOpt: DataOpt, errorDate: ErrorDate}>({
         dateOpt: {date_init: '', date_end: ''},
@@ -131,7 +132,7 @@ export default function FormOpt () {
                     <Grid xs={12}>
 
                         <form onSubmit={handleSubmit} method='post'>
-                            {/* <ComDatePicker /> */}
+                            
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                             
                               <FormControl variant="standard">

@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import DateSPicker from "../../components/date_picker";
+import DateSPicker from "../../components/datePicker";
 
 export default function SearchItems(){
     const [dateInit, setDateInit] = useState<string>('');

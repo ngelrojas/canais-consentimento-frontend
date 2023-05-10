@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { render } from '@testing-library/react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import DateSPicker from '../../../components/date_picker';
+import DateSPicker from '../../../components/datePicker';
 
 describe('DateSPicker', () => {
       // Tests that selecting valid start and end dates triggers handleSelectedDates. 

@@ -17,11 +17,11 @@ import { Order } from '../../constants';
 import { DataCanais } from '../../services';
 import { getComparator, stableSort } from '../../utils';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
-import Autocomplete from '@mui/material/Autocomplete';
+import Toolbar from '@mui/material/Toolbar';
 import EnhancedTableHead from '../EnhancedTableHead';
 import EnhancedTableToolbar from '../EnhancedTableToolBar';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import { AiOutlineSearch } from 'react-icons/ai';
 import CheckOpt from '../checkOpt';
 
 export default function EnhancedTable() {
@@ -173,28 +173,31 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: '100%' }}>
 
-      <Grid2 container spacing={2}>
-        
-        <Grid2 xs={6} md={4}>
-          <Stack spacing={2} sx={{ width: 400 }}>
-            <TextField onChange={handleSearch} />
-          </Stack>
-        </Grid2>
+      <Box sx={{flexGrow: 1}}>
+        <Grid2 container spacing={2}>
 
-        {/* <Grid2 xs={6} md={4}>
-          <FormControl variant="standard">
-            <FormControlLabel control={
-              <Checkbox
-              onChange={handleChangeInOut} 
-              inputProps={{'aria-label': 'opt-in'}} />} label="OPT IN" />
-            <FormControlLabel control={
-              <Checkbox
-              onChange={handleChangeInOut} 
-              inputProps={{'aria-label': 'opt-out'}} />} label="OPT OUT" />
-          </FormControl>
-        </Grid2> */}
-        <CheckOpt handleCheckOut={handleCheckOut} />
-      </Grid2>
+            <Grid2 xs={12} md={8}>
+              <Toolbar sx={{paddingLeft: '10%!important', paddingRight: '10%!important'}}>
+                  <FormControl sx={{width: '100%'}} variant='standard'>
+                    <TextField
+                      id='opt-search'
+                      label='Pesquisar por CPF/CNPJ ou Telefone'
+                      size='small'
+                      onChange={handleSearch} 
+                      InputProps={{
+                        endAdornment: <AiOutlineSearch size={25} />
+                      }} 
+                      />
+                  </FormControl>
+              </Toolbar>
+            </Grid2>
+
+            <Grid2 xs={4} md={4}>
+              <CheckOpt handleCheckOut={handleCheckOut} />
+            </Grid2>
+
+        </Grid2>
+      </Box>
 
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />

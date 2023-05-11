@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import BasicButtons from "../button";
+import ButtonSubmit from "../button";
 import FormControl from '@mui/material/FormControl';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -15,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import  MaskCustom  from '../inputOpt/mask_opt';
 import { isWithin90Days, FormatPhone, FormatCpfCnpj, isCpfCnpjValid, isTelephone } from '../../utils';
 import { MSG_ERRORS } from '../../constants';
-import ComDatePicker from '../datePicker';
+import { AiOutlinePhone, AiOutlinePicRight } from 'react-icons/ai';
 
 export default function FormOpt () {
     const [sendData, setSendData] = useState<{dateOpt: DateOpt, dataOpt: DataOpt, errorDate: ErrorDate}>({
@@ -132,43 +132,52 @@ export default function FormOpt () {
                     <Grid xs={12}>
 
                         <form onSubmit={handleSubmit} method='post'>
-                            
+                            <Box  sx={{
+                                display: 'flex',
+                                '& > :not(style) + :not(style)': {
+                                  ml: 1,
+                                },
+                              }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                             
-                              <FormControl variant="standard">
+                              <FormControl sx={{width: '50%'}} variant="standard">
                                   <DatePicker
                                   slotProps={{textField: {size: 'small'}}} 
-                                  label="Date Init" 
+                                  label="Data Inicio" 
                                   onChange={(e)=>handleDate(e, 'date_init')}
                                   />
                                   <span>{sendData.errorDate.date_init_error}</span>
                               </FormControl>    
-                              <FormControl variant="standard">
+                              <FormControl sx={{width: '50%'}} variant="standard">
                                   <DatePicker
                                   slotProps={{textField: {size: 'small'}}} 
-                                  label="Data End" 
+                                  label="Data Fim" 
                                   onChange={(e) => handleDate(e, 'date_end')}
                                   />
                                   <span>{sendData.errorDate.date_end_error}</span>
                               </FormControl>
                               <span>{sendData.errorDate.date_90_error}</span>     
-
                             </LocalizationProvider>
 
-                            <FormControl variant="standard">
+                            <FormControl sx={{width: '50%'}} variant="standard">
                                 <TextField
+                                    size='small'
                                     label="CPF/CNPJ"
                                     value={sendData.dataOpt.textmask}
                                     onChange={handleCpfCnpj}
                                     name="textmask"
                                     id="cpf-cnpj-opt"
+                                    InputProps={{
+                                      endAdornment: <AiOutlinePicRight size={25} />
+                                    }}
                                     error={errors.cpfCnpjE.error}
                                 />
                                 <span>{errors.cpfCnpjE.cpf_cnpj_error}</span>
                             </FormControl>
 
-                            <FormControl variant="standard">  
+                            <FormControl sx={{width: '50%'}} variant="standard">  
                                 <TextField
+                                    size='small'
                                     label="TELEFONE"
                                     value={sendData.dataOpt.numberformat}
                                     onChange={handleTelephone}
@@ -177,13 +186,17 @@ export default function FormOpt () {
                                     InputProps={{
                                         inputComponent: MaskCustom as any,
                                         inputProps: { mask: '(00)000-000-000' },
+                                        endAdornment: <AiOutlinePhone size={25} />
                                     }}
+
                                     error={errors.phoneE.error}
                                 />
                                 <span>{errors.phoneE.phone_error}</span>
                             </FormControl>
-                            
-                            <BasicButtons />
+                            </Box>
+                            <Box sx={{display: 'flex', justifyContent: 'center', mt: 5}}>
+                              <ButtonSubmit />
+                            </Box>
                         </form>
 
                     </Grid>

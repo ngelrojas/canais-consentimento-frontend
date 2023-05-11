@@ -4,8 +4,6 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-
 export default function CheckOpt({handleCheckOut}:any) {
   
   const handleChangeInOut = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,8 +21,13 @@ export default function CheckOpt({handleCheckOut}:any) {
   }
   
   return (
-    <Grid2 >
-        <FormControl variant="standard">
+    <Box  sx={{
+      flexGrow: 1,
+      display: 'flex',
+      '& > :not(style) + :not(style)': {
+        ml: 1,
+      },
+    }}>
         <FormControlLabel control={
             <Checkbox
             onChange={handleChangeInOut} 
@@ -33,7 +36,6 @@ export default function CheckOpt({handleCheckOut}:any) {
             <Checkbox
             onChange={handleChangeInOut} 
             inputProps={{'aria-label': 'opt-out'}} />} label="OPT OUT" />
-        </FormControl>
-    </Grid2>
+    </Box>
   );
 }

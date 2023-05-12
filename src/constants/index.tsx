@@ -1,14 +1,25 @@
 import { ConstErrorMsg, HeadCell } from "../services";
 
 export const MSG_ERRORS:ConstErrorMsg = {
-    date_init_error: 'data init is required',
-    date_end_error: 'data end is required',
-    date_between_error: 'Date End should not be less than Date Init',
-    date_90_error: 'Date End should not be more than 90 days from Date Init',
-    cpf_cnpj_required: 'CPF/CNPJ is required',
-    cpf_cnpj_invalid: 'CPF/CNPJ is invalid',
-    phone_error: 'Phone is required',
+    date_init_error: 'data inicio e requerido',
+    date_end_error: 'data de fim e requerido',
+    date_between_error: 'Data de fim nao deberia ser menor a data de inicio',
+    date_90_error: 'as datas entre data inicio e data fim nao deberiam ser mas de 90 dias',
+    cpf_cnpj_required: 'CPF/CNPJ e requiredio',
+    cpf_cnpj_invalid: 'CPF/CNPJ e invalido',
+    phone_error: 'Telefone/Celular e invalido',
     msg_bool: true
+}
+
+export const MSG_TABLETOOLBAR = {
+    selected: 'selecionado(s)',
+}
+
+export const MSG_TABLE_FILTER = {
+    search: 'PESQUISAR POR CPF/CNPJ OU TELEFONE',
+    opt_in: 'OPT IN',
+    opt_out: 'OPT OUT',
+    dense: 'Cumprido',
 }
 
 export const HEADCELLS: readonly HeadCell[] =[
@@ -51,3 +62,26 @@ export const HEADCELLS: readonly HeadCell[] =[
 ]
 
 export type Order = 'asc' | 'desc';
+
+export const MSG_MENUBAR = {
+    titleImport: 'Importar',
+    titleExport: 'Exportar',
+    titleMailing: 'Mailing',
+    titleCenter: 'Gestão de OPT IN/OUT',
+    close: 'Fechar',
+    titleUploadFile: 'Selecionar arquivo',
+}
+
+export const LABEL_FORM = {
+    data_init: 'DATA INÍCIO',
+    data_end: 'DATA FIM',
+    cpf_cnpj: 'CPF/CNPJ',
+    phone: 'TELEFONE',
+    clear: 'LIMPAR'
+}
+
+export const LABEL_HOME = {
+    titleRegister: 'TOTAL DE REGISTROS',
+    titleOptIn: 'TOTAL REGISTROS OPT IN',
+    titleOptOut: 'TOTAL REGISTROS OPT OUT',
+}

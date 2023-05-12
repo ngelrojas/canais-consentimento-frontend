@@ -13,7 +13,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import Switch from '@mui/material/Switch';
-import { Order } from '../../constants';
+import { Order, MSG_TABLE_FILTER } from '../../constants';
 import { DataCanais } from '../../services';
 import { getComparator, stableSort } from '../../utils';
 import TextField from '@mui/material/TextField';
@@ -23,6 +23,7 @@ import EnhancedTableToolbar from '../EnhancedTableToolBar';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { AiOutlineSearch } from 'react-icons/ai';
 import CheckOpt from '../checkOpt';
+import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -113,31 +114,6 @@ export default function EnhancedTable() {
     
   }
 
-  const handleChangeInOut = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const elIn = event.target.ariaLabel === 'opt-in';
-    const elOut = event.target.ariaLabel === 'opt-out';
-    const elValue = event.target.checked;
-    // console.log("====================================");
-    // console.log('elin', elIn);
-    // console.log('elout', elOut);
-    // console.log('elvalue', elValue);
-    if(elIn && elValue){
-      const filteredRows = visibleRows.filter((row: any) => {
-        return row.inOptInOut === true;
-      })
-      setVisibleRows(filteredRows);
-      setCanais(filteredRows);
-    }else if(elOut && elValue){
-      const filteredRows = visibleRows.filter((row: any) => {
-        return row.inOptInOut === false;
-      })
-      setVisibleRows(filteredRows);
-      setCanais(filteredRows);
-    }else{
-      fetchCanais();
-    }
-  }
-
   const handleCheckOut = (elIn: any, elOut:any, elVal:any) => {
     
     if(elIn && elVal){
@@ -176,12 +152,12 @@ export default function EnhancedTable() {
       <Box sx={{flexGrow: 1}}>
         <Grid2 container spacing={2}>
 
-            <Grid2 xs={12} md={8}>
-              <Toolbar sx={{paddingLeft: '10%!important', paddingRight: '10%!important'}}>
+            <Grid2 xs={8} md={8}>
+              <Toolbar sx={{paddingLeft: '30%!important', paddingRight: '0%!important'}}>
                   <FormControl sx={{width: '100%'}} variant='standard'>
                     <TextField
                       id='opt-search'
-                      label='Pesquisar por CPF/CNPJ ou Telefone'
+                      label={MSG_TABLE_FILTER.search}
                       size='small'
                       onChange={handleSearch} 
                       InputProps={{
@@ -252,7 +228,7 @@ export default function EnhancedTable() {
                     <TableCell align="right">{canal.dataAtualizacao}</TableCell>
                     <TableCell align="right">{canal.dataCriacao}</TableCell>
                     <TableCell align="right">{canal.SistemaOrigem}</TableCell>
-                    <TableCell align="right">{canal.inOptInOut ? "true": "false"}</TableCell>
+                    <TableCell align="right">{canal.inOptInOut ? <MdRadioButtonChecked />: <MdRadioButtonUnchecked />}</TableCell>
                   </TableRow>
                 );
               })}
@@ -280,7 +256,7 @@ export default function EnhancedTable() {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label={MSG_TABLE_FILTER.dense}
       />
     </Box>
   );

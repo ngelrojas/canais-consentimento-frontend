@@ -14,8 +14,10 @@ import {
 import TextField from '@mui/material/TextField';
 import  MaskCustom  from '../inputOpt/mask_opt';
 import { isWithin90Days, FormatPhone, FormatCpfCnpj, isCpfCnpjValid, isTelephone } from '../../utils';
-import { MSG_ERRORS } from '../../constants';
+import { MSG_ERRORS, LABEL_FORM } from '../../constants';
 import { AiOutlinePhone, AiOutlinePicRight } from 'react-icons/ai';
+import { MsgError, Form, ContainerData } from '../../styles/form.style';
+import Button from '@mui/material/Button';
 
 export default function FormOpt () {
     const [sendData, setSendData] = useState<{dateOpt: DateOpt, dataOpt: DataOpt, errorDate: ErrorDate}>({
@@ -34,7 +36,9 @@ export default function FormOpt () {
       let _phone_number = FormatPhone(event.target.value);
       const {phone_number, phone_number_error, phone_number_bool} = isTelephone(_phone_number, phone_number_unformat);
       setSendData((prevState:any) => ({ ...prevState, dataOpt: { ...prevState.dataOpt, numberformat: phone_number }}));
-      setErrors((prevState:any) => ({ ...prevState, phoneE: { ...prevState.phoneE, phone_error: phone_number_error, error: phone_number_bool } }));
+      if(!phone_number_bool){
+        setErrors((prevState:any) => ({ ...prevState, phoneE: { ...prevState.phoneE, phone_error: phone_number_error, error: phone_number_bool } }));
+      }
     };
     
     const IsCpjCnpj = (cpf_cnpj: any) => {
@@ -124,84 +128,112 @@ export default function FormOpt () {
       
       return { isValid };
     }
+
+    const handleReset = () => {
+      setSendData((prevState) => ({ ...prevState, dateOpt: { ...prevState.dateOpt, date_init: '' } }));
+      setSendData((prevState) => ({ ...prevState, dateOpt: { ...prevState.dateOpt, date_end: '' } }));
+      setSendData((prevState) => ({ ...prevState, dataOpt: { ...prevState.dataOpt, textmask: '' } }));
+      setSendData((prevState) => ({ ...prevState, dataOpt: { ...prevState.dataOpt, numberformat: '' } }));
+
+      setSendData((prevState) => ({ ...prevState, errorDate: { date_init_error: '', date_end_error: '' }}));
+      setSendData((prevState) => ({ ...prevState, errorDate: { date_90_error: '' } }));
+      setErrors((prevState) => ({ ...prevState, cpfCnpjE: { ...prevState.cpfCnpjE, cpf_cnpj_error: '', error: false } }));
+      setErrors((prevState:any) => ({ ...prevState, phoneE: { ...prevState.phoneE, phone_error: '', error: false } }));
+    }
     
     return(
         <>
-            <Box>
-                <Grid container>
-                    <Grid xs={12}>
-
-                        <form onSubmit={handleSubmit} method='post'>
-                            <Box  sx={{
-                                display: 'flex',
-                                '& > :not(style) + :not(style)': {
-                                  ml: 1,
-                                },
-                              }}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Box>
+              <ContainerData>
+                <Grid container spacing={4}>
+                  <Form onSubmit={handleSubmit}>
+                    <Box  sx={{
+                      display: 'flex',
+                      '& > :not(style) + :not(style)': {
+                        ml: 8,
+                      },
+                    }}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Grid xs={12} md={4}>
+                          <FormControl  variant="standard">
+                              <DatePicker
+                                value={sendData.dateOpt.date_init || null}
+                                slotProps={{textField: {size: 'small'}}} 
+                                label={LABEL_FORM.data_init}
+                                onChange={(e)=>handleDate(e, 'date_init')}
+                              />
+                              {sendData.errorDate.date_init_error ? <MsgError>{sendData.errorDate.date_init_error}</MsgError>: ''}
+                              
+                              {sendData.errorDate.date_90_error ? 
+                              <MsgError>{sendData.errorDate.date_90_error}</MsgError>: ''}
+                          </FormControl>
+                        </Grid>
+                        
+                        <Grid xs={12} md={4}>
+                          <FormControl variant="standard">
+                              <DatePicker
+                                value={sendData.dateOpt.date_end || null}
+                                slotProps={{textField: {size: 'small'}}} 
+                                label={LABEL_FORM.data_end}
+                                onChange={(e) => handleDate(e, 'date_end')}
+                              />
+                              {sendData.errorDate.date_end_error ? <MsgError>{sendData.errorDate.date_end_error}</MsgError>: ''}
+                              
+                          </FormControl>
+                        </Grid>
+                      </LocalizationProvider>
+                                     
+                      <Grid xs={12} md={4}>
+                        <FormControl variant="standard">
+                            <TextField
+                                size='small'
+                                label={LABEL_FORM.cpf_cnpj}
+                                value={sendData.dataOpt.textmask || ''}
+                                onChange={handleCpfCnpj}
+                                name="textmask"
+                                id="cpf-cnpj-opt"
+                                InputProps={{
+                                  endAdornment: <AiOutlinePicRight size={25} />
+                                }}
+                                error={errors.cpfCnpjE.error}
+                            />
+                            {errors.cpfCnpjE.error ? <MsgError>{errors.cpfCnpjE.cpf_cnpj_error}</MsgError>: ''}
                             
-                              <FormControl sx={{width: '50%'}} variant="standard">
-                                  <DatePicker
-                                  slotProps={{textField: {size: 'small'}}} 
-                                  label="Data Inicio" 
-                                  onChange={(e)=>handleDate(e, 'date_init')}
-                                  />
-                                  <span>{sendData.errorDate.date_init_error}</span>
-                              </FormControl>    
-                              <FormControl sx={{width: '50%'}} variant="standard">
-                                  <DatePicker
-                                  slotProps={{textField: {size: 'small'}}} 
-                                  label="Data Fim" 
-                                  onChange={(e) => handleDate(e, 'date_end')}
-                                  />
-                                  <span>{sendData.errorDate.date_end_error}</span>
-                              </FormControl>
-                              <span>{sendData.errorDate.date_90_error}</span>     
-                            </LocalizationProvider>
+                        </FormControl>
+                      </Grid>
 
-                            <FormControl sx={{width: '50%'}} variant="standard">
-                                <TextField
-                                    size='small'
-                                    label="CPF/CNPJ"
-                                    value={sendData.dataOpt.textmask}
-                                    onChange={handleCpfCnpj}
-                                    name="textmask"
-                                    id="cpf-cnpj-opt"
-                                    InputProps={{
-                                      endAdornment: <AiOutlinePicRight size={25} />
-                                    }}
-                                    error={errors.cpfCnpjE.error}
-                                />
-                                <span>{errors.cpfCnpjE.cpf_cnpj_error}</span>
-                            </FormControl>
+                      <Grid xs={12} md={4}>
+                        <FormControl variant="standard">  
+                            <TextField
+                                size='small'
+                                label={LABEL_FORM.phone}
+                                value={sendData.dataOpt.numberformat || null}
+                                onChange={handleTelephone}
+                                name="numberformat"
+                                id="telefone-opt"
+                                InputProps={{
+                                    inputComponent: MaskCustom as any,
+                                    inputProps: { mask: '(00)000-000-000' },
+                                    endAdornment: <AiOutlinePhone size={25} />
+                                }}
 
-                            <FormControl sx={{width: '50%'}} variant="standard">  
-                                <TextField
-                                    size='small'
-                                    label="TELEFONE"
-                                    value={sendData.dataOpt.numberformat}
-                                    onChange={handleTelephone}
-                                    name="numberformat"
-                                    id="telefone-opt"
-                                    InputProps={{
-                                        inputComponent: MaskCustom as any,
-                                        inputProps: { mask: '(00)000-000-000' },
-                                        endAdornment: <AiOutlinePhone size={25} />
-                                    }}
+                                error={errors.phoneE.error}
+                            />
+                            {errors.phoneE.error ? <MsgError>{errors.phoneE.phone_error}</MsgError>: ''}
+                            
+                        </FormControl>
+                      </Grid>
+                              
+                  </Box>
 
-                                    error={errors.phoneE.error}
-                                />
-                                <span>{errors.phoneE.phone_error}</span>
-                            </FormControl>
-                            </Box>
-                            <Box sx={{display: 'flex', justifyContent: 'center', mt: 5}}>
-                              <ButtonSubmit />
-                            </Box>
-                        </form>
-
-                    </Grid>
-                </Grid>
-            </Box>
-        </>
+                  <Box sx={{display: 'flex', justifyContent: 'center', mt: 5}}>
+                    <ButtonSubmit />
+                    <Button type='reset' onClick={handleReset} >{LABEL_FORM.clear}</Button>
+                  </Box>
+              </Form>
+            </Grid>
+          </ContainerData>
+        </Box>
+      </>
     )
 }

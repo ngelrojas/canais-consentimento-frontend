@@ -1,4 +1,5 @@
 import { cpf as cpfValidator, cnpj as cnpjValidator, cpf } from 'cpf-cnpj-validator';
+import { MSG_ERRORS} from '../constants';
 export function isWithin90Days(init: Date, end: Date): boolean {
     const diffMs = Math.abs(end.getTime() - init.getTime());
     const diffDays = diffMs / (1000 * 60 * 60 * 24);
@@ -28,7 +29,7 @@ export function isCpfCnpjValid (value: string) {
 
 export function isTelephone (phone_number: any, phone_number_unformat: any) {
     let p_number = phone_number.length > 0 && phone_number.length <= 11 ? phone_number_unformat : '';
-    let p_number_error = p_number ? '' : 'Telefono inválido';
+    let p_number_error = p_number ? '' : MSG_ERRORS.phone_error;
     let p_number_bool = p_number ? false : true;
 
     return {

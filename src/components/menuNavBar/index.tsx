@@ -2,15 +2,11 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import Typography from '@mui/material/Typography';
-// import Toolbar from '@mui/material/Toolbar';
-// import Container from '@mui/material/Container';
-// import Link from '@mui/material/Link';
-// import PATHS from '../../routes/paths';
-// import MenuIcon from '../../routes/menuIcon';
-import Button from '@mui/material/Button';
 import { AiOutlineDownload } from "react-icons/ai";
 import { AiOutlineUpload } from "react-icons/ai";
 import { Span, Main } from '../../styles/menus.style';
+import ModalExpImp from '../modalExIm';
+import { MSG_MENUBAR } from '../../constants';
 export default function MenuNavBar() {
 
   return (
@@ -38,7 +34,7 @@ export default function MenuNavBar() {
                 },
               }}>
               <Grid2 container spacing={3}>
-                <Grid2 xs={4} md={4}>
+                <Grid2 xs={8} md={4}>
                     
                   <Grid2 container>
                     <Grid2 sx={{
@@ -58,7 +54,7 @@ export default function MenuNavBar() {
                   </Grid2>
                     
                 </Grid2>
-                <Grid2 sx={{fontWeight: '500', paddingTop: '1.5%'}} xs={8} md={8}>Gestao de OptIn / Out</Grid2>
+                <Grid2 sx={{fontWeight: '500', paddingTop: '1.5%'}} xs={4} md={8}>{MSG_MENUBAR.titleCenter}</Grid2>
               </Grid2>
             </Box>
             <Box sx={{
@@ -73,12 +69,15 @@ export default function MenuNavBar() {
                   ml: 4,
                 },
               }}>
-              <Button sx={{color: '#F9DD17', textTransform: 'capitalize'}} variant='text'>
-                <AiOutlineDownload fontSize={25} /> <Span>Importar Mailing</Span>
-              </Button>
-              <Button sx={{color: '#F9DD17', textTransform: 'capitalize'}} variant='text'>
-                <AiOutlineUpload fontSize={25} /> <Span>Exportar Mailing</Span>
-              </Button>
+              
+              <ModalExpImp title={MSG_MENUBAR.titleImport} subtitle={MSG_MENUBAR.titleMailing}>
+                <AiOutlineDownload fontSize={25} /> <Span>{MSG_MENUBAR.titleImport} {MSG_MENUBAR.titleMailing}</Span>
+              </ModalExpImp>
+
+              <ModalExpImp title={MSG_MENUBAR.titleExport} subtitle={MSG_MENUBAR.titleMailing}>
+              <AiOutlineUpload fontSize={25} /> <Span>{MSG_MENUBAR.titleExport} {MSG_MENUBAR.titleMailing}</Span>
+              </ModalExpImp>
+              
             </Box>
           </Box>
         </Main>

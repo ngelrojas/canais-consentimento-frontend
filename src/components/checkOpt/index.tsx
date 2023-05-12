@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
+import { MSG_TABLE_FILTER } from '../../constants';
 
 export default function CheckOpt({handleCheckOut}:any) {
   
@@ -24,6 +24,7 @@ export default function CheckOpt({handleCheckOut}:any) {
     <Box  sx={{
       flexGrow: 1,
       display: 'flex',
+      justifyContent: 'flex-end',
       '& > :not(style) + :not(style)': {
         ml: 1,
       },
@@ -31,11 +32,11 @@ export default function CheckOpt({handleCheckOut}:any) {
         <FormControlLabel control={
             <Checkbox
             onChange={handleChangeInOut} 
-            inputProps={{'aria-label': 'opt-in'}} />} label="OPT IN" />
+            inputProps={{'aria-label': 'opt-in'}} />} label={MSG_TABLE_FILTER.opt_in} />
         <FormControlLabel control={
             <Checkbox
             onChange={handleChangeInOut} 
-            inputProps={{'aria-label': 'opt-out'}} />} label="OPT OUT" />
+            inputProps={{'aria-label': 'opt-out'}} />} label={MSG_TABLE_FILTER.opt_out} />
     </Box>
   );
 }

@@ -1,5 +1,4 @@
 import Home from "../pages/home";
-import SearchItems from "../pages/search-items/";
 import { IPATH } from '../services';
 
 const PATHS: IPATH[] = [
@@ -13,12 +12,6 @@ const PATHS: IPATH[] = [
         url:'/home',
         exact: true,
         component: Home,
-    },
-    {
-        name:'Exportar',
-        url:'/search-items',
-        exact: true,
-        component: SearchItems,
     },
 ]
 

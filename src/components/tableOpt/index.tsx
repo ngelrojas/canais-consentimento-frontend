@@ -36,7 +36,7 @@ export default function EnhancedTable() {
   const [canais, setCanais] = useState<DataCanais[]>([]);
 
   const fetchCanais = async () => {
-    const response = await axios.get('http://localhost:3001/canais');
+    const response = await axios.get('http://localhost:3001/search');
     setCanais(response.data);
   }
 

@@ -89,3 +89,10 @@ export interface EnhancedTableProps {
 export interface EnhancedTableToolbarProps {
     numSelected: number;
 }
+
+export interface CanaisStore {
+    totalCanais: any;
+    filterCanais: any;
+    setTotalCanais: (data: any) => void;
+    setFilterCanais: (data: any) => void;
+};

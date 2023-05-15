@@ -104,3 +104,10 @@ export interface MaskProps {
     [key: string]: any;
     onChange: (value: any) => void;
 }
+
+export interface LoginStore {
+    userName: string;
+    password: string;
+    resp: any;
+    setToken: (data: any) => void;
+}

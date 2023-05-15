@@ -85,3 +85,8 @@ export const LABEL_HOME = {
     titleOptIn: 'TOTAL REGISTROS OPT IN',
     titleOptOut: 'TOTAL REGISTROS OPT OUT',
 }
+
+export const PATH = {
+    urlLogin: '/oauth/login?APP_NAME=cg-user-app',
+    urlAPI: '/api/canais-consentimento/search',
+}

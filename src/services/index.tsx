@@ -96,3 +96,11 @@ export interface CanaisStore {
     setTotalCanais: (data: any) => void;
     setFilterCanais: (data: any) => void;
 };
+
+export interface MaskProps {
+    mask: string;
+    name: any;
+    value: any;
+    [key: string]: any;
+    onChange: (value: any) => void;
+}

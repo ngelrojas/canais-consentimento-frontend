@@ -90,3 +90,8 @@ export const PATH = {
     urlLogin: '/oauth/login?APP_NAME=cg-user-app',
     urlAPI: '/api/canais-consentimento/search',
 }
+
+export const CREDENTIALS = {
+    userName: import.meta.env.VITE_APP_USERNAME,
+    password: import.meta.env.VITE_APP_PASSWORD,
+}

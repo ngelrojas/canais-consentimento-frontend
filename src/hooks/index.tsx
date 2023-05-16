@@ -34,7 +34,7 @@ export const useFilterCanais = (token: any, filter: any) => {
 
   return filterCanais;
 };
-// TODO: check this point is not returning
+
 export const useLogin = (userName: string, password: string) => {
   const {resp, setToken } = useLoginStore();
 
@@ -42,13 +42,11 @@ export const useLogin = (userName: string, password: string) => {
     const fetchLogin = async () => {
       const login = new Login(userName, password);
       const data = await login.getToken();
-      console.log("HERE =>> ", data);
       setToken(data);
     };
-    console.log("HERE =>> ", resp);
 
     fetchLogin();
-  },[resp, setToken]);
+  },[setToken]);
 
   return resp;
 }

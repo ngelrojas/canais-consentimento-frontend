@@ -17,6 +17,7 @@ export class LocalStorageService {
     }
 
 }
+
 const localStorageService = new LocalStorageService();
 localStorageService.setItem("myKey", "myValue");
 const value = localStorageService.getItem("myKey");

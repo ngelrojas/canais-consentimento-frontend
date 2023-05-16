@@ -1,4 +1,7 @@
 import API from '../api';
+import { PATH } from '../constants';
+import axios from 'axios';
+
 export class Canais {
     
     private token: any;
@@ -27,13 +30,17 @@ export class Canais {
     * @param: filter: any
     */
     public async getFilterCanais (filter: any) {
-        this.response = await API.get(`/search?${filter}`
-        // , {
-        //     headers: {
-        //         Authorization: `Token ${this.token}`
-        //     }
-        // }
+        this.response = await API.get(`${PATH.urlAPI}?${filter}`, {
+                headers: {
+                    Authorization: `Bearer ${this.token}`
+                }
+            }
         );
+        return this.response; 
+    }
+
+    public async getFilterCanaiss (filter: any) {
+        this.response = await axios.get('http://localhost:3001/search')
         return this.response; 
     }
 

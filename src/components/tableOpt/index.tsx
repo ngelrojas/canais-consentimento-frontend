@@ -24,6 +24,7 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { AiOutlineSearch } from 'react-icons/ai';
 import CheckOpt from '../checkOpt';
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
+import { useFilterCanais } from '../../hooks';
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -32,6 +33,21 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  let dataInicio = '2023-01-01T03:00:00.000Z';
+  let dataFim = '2023-03-01T03:00:00.000Z';
+  const filter = `dataInicio=${dataInicio}&dataFim=${dataFim}`
+  
+  const filterCanais = useFilterCanais(filter);
+  let content: any = [];
+  // const { content } = filterCanais ? filterCanais.data?.dados : [];
+  console.log("filterCanais: ", filterCanais);
+  // TODO: statement "if" is tempory
+  if (filterCanais){
+
+    content = filterCanais;
+  }else{
+    content = []
+  }
 
   const [canais, setCanais] = useState<DataCanais[]>([]);
 
@@ -136,6 +152,7 @@ export default function EnhancedTable() {
 
   useEffect(() => {
     fetchCanais();
+    console.log("HERE DATA FROM API OPT", content);
   }, []);
   
   useEffect(() => {

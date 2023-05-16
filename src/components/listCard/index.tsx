@@ -13,7 +13,43 @@ export default function ListCardsInOut () {
 
         <Grid sx={{justifyContent: 'center', textAlign: 'center', color: '#F9DD17'}} container spacing={{ xs: 2, md: 10 }} >
             <Toolbar>
-                {totalCanais && totalCanais.data.map((canal:any) => {
+<Grid xs={12} md={4} >
+                            <CardOpt>
+                                <Typography sx={{justifyContent: 'center'}} variant="subtitle1" >
+                                    
+                                    TOTAL REGISTROS
+                                    
+                                </Typography>
+                                <Typography sx={{justifyContent: 'center'}} variant="h2" >
+                                    237
+                                </Typography>
+                            </CardOpt>      
+                        </Grid>
+                        <Grid xs={12} md={4} >
+                            <CardOpt>
+                                <Typography sx={{justifyContent: 'center'}} variant="subtitle1" >
+                                    
+                                    TOTAL REGISTROS OPT IN
+                                    
+                                </Typography>
+                                <Typography sx={{justifyContent: 'center'}} variant="h2" >
+                                    34
+                                </Typography>
+                            </CardOpt>      
+                        </Grid>
+                        <Grid xs={12} md={4} >
+                            <CardOpt>
+                                <Typography sx={{justifyContent: 'center'}} variant="subtitle1" >
+                                    
+                                    TOTAL REGISTROS OPT OUT
+                                    
+                                </Typography>
+                                <Typography sx={{justifyContent: 'center'}} variant="h2" >
+                                    23
+                                </Typography>
+                            </CardOpt>      
+                        </Grid>
+                {/* {totalCanais && totalCanais.data.map((canal:any) => {
                     return(
                         <Grid xs={12} md={4} key={canal.id}>
                             <CardOpt>
@@ -28,7 +64,7 @@ export default function ListCardsInOut () {
                             </CardOpt>      
                         </Grid>
                     )
-                })}
+                })} */}
             </Toolbar>
         </Grid>
 

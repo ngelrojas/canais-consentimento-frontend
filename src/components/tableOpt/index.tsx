@@ -25,6 +25,10 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import CheckOpt from '../checkOpt';
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
 import { useFilterCanais } from '../../hooks';
+import { PATH } from '../../constants';
+import { Login } from '../../services/service.login';
+import { LocalStorageService } from '../../services/service.token';
+import API from '../../api';
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -36,25 +40,28 @@ export default function EnhancedTable() {
   let dataInicio = '2023-01-01T03:00:00.000Z';
   let dataFim = '2023-03-01T03:00:00.000Z';
   const filter = `dataInicio=${dataInicio}&dataFim=${dataFim}`
-  
+  // const [content, setContent] = useState<DataCanais[]>([]);
+  const [tokens, setTokens] = useState<string>('');
   const filterCanais = useFilterCanais(filter);
-  let content: any = [];
-  // const { content } = filterCanais ? filterCanais.data?.dados : [];
-  console.log("filterCanais: ", filterCanais);
-  // TODO: statement "if" is tempory
-  if (filterCanais){
 
-    content = filterCanais;
-  }else{
-    content = []
-  }
+  // let content: any = [];
+  const  content  = filterCanais ? filterCanais.data?.dados.content : [];
+  // console.log(content)
+  // console.log("filterCanais: ", filterCanais);
+  // TODO: statement "if" is tempory
+  // if (filterCanais){
+
+  //   content = filterCanais;
+  // }else{
+  //   content = []
+  // }
 
   const [canais, setCanais] = useState<DataCanais[]>([]);
 
-  const fetchCanais = async () => {
-    const response = await axios.get('http://localhost:3001/search');
-    setCanais(response.data);
-  }
+  // const fetchCanais = async () => {
+  //   const response = await axios.get('http://localhost:3001/search');
+  //   setCanais(response.data);
+  // }
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -68,7 +75,7 @@ export default function EnhancedTable() {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     
     if (event.target.checked) {
-      const newSelected = canais.map((n) => n.CpfCnpj);
+      const newSelected = content.map((n:any) => n.CpfCnpj);
 
       setSelected(newSelected);
       return;
@@ -113,13 +120,14 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - canais.length) : 0;
-    const [visibleRows, setVisibleRows] = useState(canais);
-
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - content.length) : 0;
+  // console.log("content: ", content);
+  const [visibleRows, setVisibleRows] = useState(content);
+  // console.log("visibleRows: ", visibleRows);
   const handleSearch = (searchVal: React.ChangeEvent<HTMLInputElement>) => {
     const value = searchVal.target.value.toString();
     if(value === '') {
-      fetchCanais();
+      // fetchCanais();
     }else{
       const filteredRows = visibleRows.filter((row: any) => {
         return row.CpfCnpj.toString().includes(value) || row.Telefone.toString().includes(value);
@@ -145,23 +153,37 @@ export default function EnhancedTable() {
       setVisibleRows(filteredRows);
       setCanais(filteredRows);
     }else{
-      fetchCanais();
+      // fetchCanais();
     }
 
   }
 
   useEffect(() => {
-    fetchCanais();
-    console.log("HERE DATA FROM API OPT", content);
+    // fetchCanais();
+    const fetchLogin = async () => {
+      const response = await API.post(`${PATH.urlLogin}`, {
+        userName: import.meta.env.VITE_APP_USERNAME,
+        password: import.meta.env.VITE_APP_PASSWORD,
+      });
+      console.log("response: ", response);
+      setTokens(response.data);
+    }
+
+    fetchLogin().then((data)=>{
+      console.log(data)
+    }).catch((error)=>{ 
+      console.log('error here', error)
+    });
+    // console.log("HERE DATA FROM API OPT", content.length);
   }, []);
   
   useEffect(() => {
     
-    setVisibleRows(stableSort(canais, getComparator(order, orderBy)).slice(
+    setVisibleRows(stableSort(content, getComparator(order, orderBy)).slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,
     ));
-  }, [canais, order, orderBy, page, rowsPerPage]);
+  }, [content, order, orderBy, page, rowsPerPage]);
   
   return (
     <Box sx={{ width: '100%' }}>
@@ -209,7 +231,7 @@ export default function EnhancedTable() {
               rowCount={canais.length}
             />
             <TableBody>
-              {visibleRows.map((canal, index) => {
+              {visibleRows.map((canal:any, index:any) => {
                 const isItemSelected = isSelected(canal.CpfCnpj);
                 const labelId = `enhanced-table-checkbox-${index}`;
 

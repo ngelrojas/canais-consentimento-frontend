@@ -18,6 +18,12 @@ export class Login {
         });
         return this.response; 
     }
-
-
 }
+
+// export const getToken = async (userName: string, password: string) => {
+//   const response = await API.post(PATH.urlLogin, {
+//     userName,
+//     password,
+//   });
+//   return response;
+// };

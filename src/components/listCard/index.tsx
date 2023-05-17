@@ -2,12 +2,10 @@ import Grid from '@mui/material/Unstable_Grid2';
 import CardOpt from '../../components/cardOpt';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { useTotalCanais } from '../../hooks';
 
 //TODO: create a services to login with server, and get token
 export default function ListCardsInOut () {
-    let token = ';laksjdhlfaksjd';
-    const totalCanais = useTotalCanais(token);
+    const totalCanais = []
     
     return(
 

@@ -1,6 +1,5 @@
 import API from '../api';
 import { PATH } from '../constants';
-import axios from 'axios';
 
 export class Canais {
     
@@ -9,20 +8,6 @@ export class Canais {
 
     constructor(token: any) {
         this.token = token;
-    }
-
-    /*
-    *  @description: Retorna todos os canais totalizados 
-    */
-    public async getTotalCanais () {
-        this.response = await API.get(`/canaistotal`
-        // ,{
-        //     headers: {
-        //         Authorization: `Token ${this.token}`
-        //     }
-        // }
-        );
-        return this.response; 
     }
 
     /*
@@ -36,11 +21,6 @@ export class Canais {
                 }
             }
         );
-        return this.response; 
-    }
-
-    public async getFilterCanaiss (filter: any) {
-        this.response = await axios.get('http://localhost:3001/search')
         return this.response; 
     }
 

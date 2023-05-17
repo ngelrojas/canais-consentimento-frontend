@@ -9,3 +9,4 @@ export function LoginOpt(){
     localStorageService.setItem('token', token);
     return <span />;
 }
+

@@ -62,11 +62,11 @@ export interface ConstErrorMsg {
 }
 
 export interface DataCanais {
-    CpfCnpj: string,
-    Telefone: string,
+    cpfCnpj: string,
+    telefone: string,
     dataAtualizacao: string,
     dataCriacao: string,
-    SistemaOrigem: string,
+    sistemaOrigem: string,
     inOptInOut: string,
 }
 
@@ -96,3 +96,18 @@ export interface CanaisStore {
     setTotalCanais: (data: any) => void;
     setFilterCanais: (data: any) => void;
 };
+
+export interface MaskProps {
+    mask: string;
+    name: any;
+    value: any;
+    [key: string]: any;
+    onChange: (value: any) => void;
+}
+
+export interface LoginStore {
+    userName: string;
+    password: string;
+    resp: any;
+    setToken: (data: any) => void;
+}

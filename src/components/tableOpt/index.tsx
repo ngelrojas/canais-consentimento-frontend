@@ -24,20 +24,26 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { AiOutlineSearch } from 'react-icons/ai';
 import CheckOpt from '../checkOpt';
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
+import { useFilterCanais } from '../../hooks';
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof DataCanais>('CpfCnpj');
+  const [orderBy, setOrderBy] = React.useState<keyof DataCanais>('cpfCnpj');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [content, setContent] = useState<DataCanais[]>([]);
 
-  const [canais, setCanais] = useState<DataCanais[]>([]);
+  let dataInicio = '2023-01-01T03:00:00.000Z';
+  let dataFim = '2023-03-01T03:00:00.000Z';
+  const filter = `dataInicio=${dataInicio}&dataFim=${dataFim}`;
+  // const filter = ''
+  const filterCanais = useFilterCanais(filter);
 
-  const fetchCanais = async () => {
-    const response = await axios.get('http://localhost:3001/search');
-    setCanais(response.data);
+  const fetchCanais = () => {
+    const _content = filterCanais ? filterCanais.data[0]?.dados.content : [];
+    setContent(_content);
   }
 
   const handleRequestSort = (
@@ -52,7 +58,7 @@ export default function EnhancedTable() {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     
     if (event.target.checked) {
-      const newSelected = canais.map((n) => n.CpfCnpj);
+      const newSelected = content.map((n:any) => n.cpfCnpj);
 
       setSelected(newSelected);
       return;
@@ -60,12 +66,12 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, cpf_cnpj: string) => {
-    const selectedIndex = selected.indexOf(cpf_cnpj);
+  const handleClick = (event: React.MouseEvent<unknown>, cpfCnpj: string) => {
+    const selectedIndex = selected.indexOf(cpfCnpj);
     let newSelected: readonly string[] = [];
     
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, cpf_cnpj);
+      newSelected = newSelected.concat(selected, cpfCnpj);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -97,19 +103,21 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - canais.length) : 0;
-    const [visibleRows, setVisibleRows] = useState(canais);
-
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - content.length) : 0;
+  
+  const [visibleRows, setVisibleRows] = useState(content);
+  
   const handleSearch = (searchVal: React.ChangeEvent<HTMLInputElement>) => {
     const value = searchVal.target.value.toString();
     if(value === '') {
       fetchCanais();
     }else{
       const filteredRows = visibleRows.filter((row: any) => {
-        return row.CpfCnpj.toString().includes(value) || row.Telefone.toString().includes(value);
+        return row.cpfCnpj.toString().includes(value) || row.telefone.toString().includes(value);
       })
       setVisibleRows(filteredRows);
-      setCanais(filteredRows);
+      setContent(filteredRows);
+      // content = filteredRows;
     }
     
   }
@@ -121,30 +129,32 @@ export default function EnhancedTable() {
         return row.inOptInOut === true;
       })
       setVisibleRows(filteredRows);
-      setCanais(filteredRows);
+      setContent(filteredRows);
     }else if(elOut && elVal){
       const filteredRows = visibleRows.filter((row: any) => {
         return row.inOptInOut === false;
       })
       setVisibleRows(filteredRows);
-      setCanais(filteredRows);
+      setContent(filteredRows);
     }else{
       fetchCanais();
     }
 
   }
-
   useEffect(() => {
     fetchCanais();
-  }, []);
-  
+  },[])
+
   useEffect(() => {
     
-    setVisibleRows(stableSort(canais, getComparator(order, orderBy)).slice(
+    setVisibleRows(stableSort(content, getComparator(order, orderBy)).slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,
     ));
-  }, [canais, order, orderBy, page, rowsPerPage]);
+  }, 
+  // []
+  [content, order, orderBy, page, rowsPerPage]
+  );
   
   return (
     <Box sx={{ width: '100%' }}>
@@ -189,21 +199,21 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={canais.length}
+              rowCount={content.length}
             />
             <TableBody>
-              {visibleRows.map((canal, index) => {
-                const isItemSelected = isSelected(canal.CpfCnpj);
+              {visibleRows.map((canal:any, index:any) => {
+                const isItemSelected = isSelected(canal.cpfCnpj);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, canal.CpfCnpj)}
+                    onClick={(event) => handleClick(event, canal.cpfCnpj)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={canal.CpfCnpj}
+                    key={canal.cpfCnpj}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
@@ -222,12 +232,12 @@ export default function EnhancedTable() {
                       scope="row"
                       padding="none"
                     >
-                      {canal.CpfCnpj}
+                      {canal.cpfCnpj}
                     </TableCell>
-                    <TableCell align="right">{canal.Telefone}</TableCell>
+                    <TableCell align="right">{canal.telefone}</TableCell>
                     <TableCell align="right">{canal.dataAtualizacao}</TableCell>
                     <TableCell align="right">{canal.dataCriacao}</TableCell>
-                    <TableCell align="right">{canal.SistemaOrigem}</TableCell>
+                    <TableCell align="right">{canal.sistemaOrigem}</TableCell>
                     <TableCell align="right">{canal.inOptInOut ? <MdRadioButtonChecked />: <MdRadioButtonUnchecked />}</TableCell>
                   </TableRow>
                 );
@@ -247,7 +257,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={canais.length}
+          count={content.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

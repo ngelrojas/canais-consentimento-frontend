@@ -17,9 +17,10 @@ export class LocalStorageService {
     }
 
 }
-const localStorageService = new LocalStorageService();
-localStorageService.setItem("myKey", "myValue");
-const value = localStorageService.getItem("myKey");
-console.log(value); // "myValue"
-localStorageService.removeItem("myKey");
-localStorageService.clear();
+
+// const localStorageService = new LocalStorageService();
+// localStorageService.setItem("myKey", "myValue");
+// const value = localStorageService.getItem("myKey");
+// console.log(value); // "myValue"
+// localStorageService.removeItem("myKey");
+// localStorageService.clear();

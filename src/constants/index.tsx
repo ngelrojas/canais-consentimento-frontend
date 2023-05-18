@@ -24,13 +24,13 @@ export const MSG_TABLE_FILTER = {
 
 export const HEADCELLS: readonly HeadCell[] =[
     {
-        id: 'CpfCnpj',
+        id: 'cpfCnpj',
         numeric: false,
         disablePadding: true,
         label: 'CPF/CNPJ',
     },
     {
-        id: 'Telefone',
+        id: 'telefone',
         numeric: true,
         disablePadding: false,
         label: 'Telefone',
@@ -48,7 +48,7 @@ export const HEADCELLS: readonly HeadCell[] =[
         label: 'Primeiro Consentimento',
     },
     {
-        id: 'SistemaOrigem',
+        id: 'sistemaOrigem',
         numeric: true,
         disablePadding: false,
         label: 'Canal',
@@ -84,4 +84,14 @@ export const LABEL_HOME = {
     titleRegister: 'TOTAL DE REGISTROS',
     titleOptIn: 'TOTAL REGISTROS OPT IN',
     titleOptOut: 'TOTAL REGISTROS OPT OUT',
+}
+
+export const PATH = {
+    urlLogin: '/oauth/login?APP_NAME=cg-user-app',
+    urlAPI: '/api/canais-consentimento/search',
+}
+
+export const CREDENTIALS = {
+    userName: import.meta.env.VITE_APP_USERNAME,
+    password: import.meta.env.VITE_APP_PASSWORD,
 }

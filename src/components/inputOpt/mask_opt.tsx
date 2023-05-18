@@ -2,7 +2,6 @@ import * as React from 'react';
 import { IMaskInput } from 'react-imask';
 import { MaskProps } from '../../services';
 
-
 const MaskCustom = React.forwardRef<HTMLElement, MaskProps>(
   function MaskCustom(props, ref) {
     const { onChange, mask, ...other } = props;

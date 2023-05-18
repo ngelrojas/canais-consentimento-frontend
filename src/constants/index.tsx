@@ -24,13 +24,13 @@ export const MSG_TABLE_FILTER = {
 
 export const HEADCELLS: readonly HeadCell[] =[
     {
-        id: 'CpfCnpj',
+        id: 'cpfCnpj',
         numeric: false,
         disablePadding: true,
         label: 'CPF/CNPJ',
     },
     {
-        id: 'Telefone',
+        id: 'telefone',
         numeric: true,
         disablePadding: false,
         label: 'Telefone',
@@ -48,7 +48,7 @@ export const HEADCELLS: readonly HeadCell[] =[
         label: 'Primeiro Consentimento',
     },
     {
-        id: 'SistemaOrigem',
+        id: 'sistemaOrigem',
         numeric: true,
         disablePadding: false,
         label: 'Canal',

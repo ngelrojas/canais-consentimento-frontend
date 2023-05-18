@@ -62,11 +62,11 @@ export interface ConstErrorMsg {
 }
 
 export interface DataCanais {
-    CpfCnpj: string,
-    Telefone: string,
+    cpfCnpj: string,
+    telefone: string,
     dataAtualizacao: string,
     dataCriacao: string,
-    SistemaOrigem: string,
+    sistemaOrigem: string,
     inOptInOut: string,
 }
 

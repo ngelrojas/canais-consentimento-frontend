@@ -5,22 +5,7 @@ import { Login } from '../services/service.login';
 import { useCanaisStore, useLoginStore } from '../store';
 import { LocalStorageService } from '../services/service.token';
 
-// export const useTotalCanais = (token: any) => {
-//   const { totalCanais, setTotalCanais } = useCanaisStore();
-
-//   useEffect(() => {
-//     const fetchTotalCanais = async () => {
-//       const canais = new Canais(token);
-//       const data = await canais.getTotalCanais();
-//       setTotalCanais(data);
-//     };
-
-//     fetchTotalCanais();
-//   }, [token, setTotalCanais]);
-
-//   return totalCanais;
-// };
-
+//TODO: before upload to dev or hml, server, remove .getFilterCanaiss replace to .getFilterCanais
 export const useFilterCanais = (filter: any) => {
   const { filterCanais, setFilterCanais } = useCanaisStore();
   const token = new LocalStorageService().getItem('token');
@@ -28,13 +13,12 @@ export const useFilterCanais = (filter: any) => {
   useEffect(() => {
     const fetchFilterCanais = async () => {
       const canais = new Canais(token);
-      const data = await canais.getFilterCanais(filter);
-      console.log('IN DATA: ', data);
+      const data = await canais.getFilterCanaiss(filter);
       setFilterCanais(data);
     };
 
     fetchFilterCanais();
-  }, [filter, setFilterCanais]);
+  }, [setFilterCanais]);
 
   return filterCanais;
 };

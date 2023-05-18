@@ -24,4 +24,8 @@ export class Canais {
         return this.response; 
     }
 
+    public async getFilterCanaiss (filter: any) {
+        this.response = await API.get(`/search`);
+        return this.response; 
+    }
 }

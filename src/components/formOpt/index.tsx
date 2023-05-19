@@ -18,8 +18,11 @@ import { MSG_ERRORS, LABEL_FORM } from '../../constants';
 import { AiOutlinePhone, AiOutlinePicRight } from 'react-icons/ai';
 import { MsgError, Form, ContainerData } from '../../styles/form.style';
 import Button from '@mui/material/Button';
+import { useFilterCanais } from '../../hooks';
 
 export default function FormOpt () {
+    const [filter, setFilter] = useState<string>('');
+    useFilterCanais(filter);
     const [sendData, setSendData] = useState<{dateOpt: DateOpt, dataOpt: DataOpt, errorDate: ErrorDate}>({
         dateOpt: {date_init: '', date_end: ''},
         dataOpt: {textmask: '', numberformat: ''},
@@ -85,6 +88,11 @@ export default function FormOpt () {
           telephone: formatPhone,
         };
         console.log('data submit => ', dataSubmit);
+        let dataInicio = '2023-01-01T03:00:00.000Z';
+        let dataFim = '2023-03-01T03:00:00.000Z';
+        const filter = `dataInicio=${dataInicio}&dataFim=${dataFim}`;
+        // const filter = ''
+        setFilter(filter);
         // Do something here to submit the form
       } else {
         console.log("Form data is invalid, please fix the errors:");

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Canais } from '../services/service.canais';
 import { Login } from '../services/service.login';
-// import { getToken } from '../services/service.login';
 import { useCanaisStore, useLoginStore } from '../store';
 import { LocalStorageService } from '../services/service.token';
 

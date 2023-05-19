@@ -91,9 +91,7 @@ export interface EnhancedTableToolbarProps {
 }
 
 export interface CanaisStore {
-    totalCanais: any;
     filterCanais: any;
-    setTotalCanais: (data: any) => void;
     setFilterCanais: (data: any) => void;
 };
 

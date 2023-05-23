@@ -44,10 +44,10 @@ export interface DateSubmit {
 }
 
 export interface DataSubmit {
-    cpf_cnpj: string;
+    cpfCnpj: string;
     telephone: string;
-    date_init: string;
-    date_end: string;
+    dataInicio: string;
+    dataFim: string;
 }
 
 export interface ConstErrorMsg {
@@ -108,4 +108,11 @@ export interface LoginStore {
     password: string;
     resp: any;
     setToken: (data: any) => void;
+}
+
+export interface TotalRegisters {
+    totalIn: number;
+    totalOut: number;
+    setTotalIn: (data: number) => void;
+    setTotalOut: (data: number) => void;
 }

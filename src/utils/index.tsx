@@ -73,3 +73,22 @@ export function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => n
     });
     return stabilizedThis.map((el) => el[0]);
 }
+
+export function handleSendData (date_init: any, date_end: any, cpf_cnpj: string, telefone: string) {
+    let filter = '';
+    if(date_init && date_end && cpf_cnpj && telefone){
+      return filter = `dataInicio=${date_init}&dataFim=${date_end}&cpfCnpj=${cpf_cnpj}&telefone=${telefone}`
+    }else if(date_init && date_end && cpf_cnpj){
+      return filter = `dataInicio=${date_init}&dataFim=${date_end}&cpfCnpj=${cpf_cnpj}`
+    }else if(date_init && date_end && telefone){
+      return filter = `dataInicio=${date_init}&dataFim=${date_end}&telefone=${telefone}`
+    }else if(date_init && date_end){
+      return filter = `dataInicio=${date_init}&dataFim=${date_end}`
+    }else if(cpf_cnpj){
+      return filter = `cpfCnpj=${cpf_cnpj}`
+    }else if(telefone){
+      return filter = `telefone=${telefone}`
+    }else{
+        return filter = ''
+    }
+}

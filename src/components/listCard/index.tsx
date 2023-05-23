@@ -1,12 +1,15 @@
+import { useEffect } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardOpt from '../../components/cardOpt';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { useCanaisStore, useTotalRegister} from '../../store';
 
-//TODO: create a services to login with server, and get token
 export default function ListCardsInOut () {
-    const totalCanais = []
-    
+    let totalCanais = useCanaisStore((state) => state.filterCanais);
+    let totalIn = useTotalRegister((state) => state.totalIn);
+    let totalOut = useTotalRegister((state) => state.totalOut);
+
     return(
 
         <Grid sx={{justifyContent: 'center', textAlign: 'center', color: '#F9DD17'}} container spacing={{ xs: 2, md: 10 }} >
@@ -19,19 +22,19 @@ export default function ListCardsInOut () {
                                     
                                 </Typography>
                                 <Typography sx={{justifyContent: 'center'}} variant="h2" >
-                                    237
+                                    {totalCanais ? totalCanais.data[0]?.dados.totalElements : 0}
                                 </Typography>
                             </CardOpt>      
                         </Grid>
                         <Grid xs={12} md={4} >
                             <CardOpt>
                                 <Typography sx={{justifyContent: 'center'}} variant="subtitle1" >
-                                    
+                                
                                     TOTAL REGISTROS OPT IN
-                                    
+                                
                                 </Typography>
                                 <Typography sx={{justifyContent: 'center'}} variant="h2" >
-                                    34
+                                    {totalIn ? totalIn : 0}
                                 </Typography>
                             </CardOpt>      
                         </Grid>
@@ -43,26 +46,10 @@ export default function ListCardsInOut () {
                                     
                                 </Typography>
                                 <Typography sx={{justifyContent: 'center'}} variant="h2" >
-                                    23
+                                    {totalOut ? totalOut : 0}
                                 </Typography>
                             </CardOpt>      
                         </Grid>
-                {/* {totalCanais && totalCanais.data.map((canal:any) => {
-                    return(
-                        <Grid xs={12} md={4} key={canal.id}>
-                            <CardOpt>
-                                <Typography sx={{justifyContent: 'center'}} variant="subtitle1" >
-                                    
-                                    {canal.totalName}
-                                    
-                                </Typography>
-                                <Typography sx={{justifyContent: 'center'}} variant="h2" >
-                                    {canal.totalRegistro}
-                                </Typography>
-                            </CardOpt>      
-                        </Grid>
-                    )
-                })} */}
             </Toolbar>
         </Grid>
 

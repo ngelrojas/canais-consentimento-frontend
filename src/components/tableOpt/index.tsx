@@ -36,8 +36,7 @@ export default function EnhancedTable() {
   const [content, setContent] = useState<DataCanais[]>([]);
   const [tRin, setTRin] = useState(0);
   const [tRout, setTRout] = useState(0);
-  // useTotalRegisters(tRin, tRout);
-  const useTotalRegs = useTotalRegisters(tRin, tRout);
+  useTotalRegisters(tRin, tRout);
 
   const filterCanais = useCanaisStore((state) => state.filterCanais);
 
@@ -128,7 +127,6 @@ export default function EnhancedTable() {
         return row.inOptInOut === true;
       })
       console.log("ELIN ", filteredRows.length);
-      useTotalRegs.totalIn = filteredRows.length;
       setTRin(filteredRows.length);
       // setTRout(0);
       setVisibleRows(filteredRows);

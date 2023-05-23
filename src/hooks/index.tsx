@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Canais } from '../services/service.canais';
 import { Login } from '../services/service.login';
-import { useCanaisStore, useLoginStore, useTotalRegister } from '../store';
+import { useCanaisStore, useLoginStore } from '../store';
 import { LocalStorageService } from '../services/service.token';
 
 //TODO: before upload to dev or hml, server, remove .getFilterCanaiss replace to .getFilterCanais
@@ -35,16 +35,4 @@ export const useLogin = (userName: string, password: string) => {
   }, []);
   
   return resp;
-};
-
-export const useTotalRegisters = (tIn:number, tOut:number) => {
-
-  const { totalIn, setTotalIn, totalOut, setTotalOut } = useTotalRegister();
-
-  useEffect(() => {
-    setTotalIn(tIn);
-    setTotalOut(tOut);
-  }, []);
-  
-    return { totalIn, totalOut };
 };

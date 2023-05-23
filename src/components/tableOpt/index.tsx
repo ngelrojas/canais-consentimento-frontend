@@ -24,7 +24,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import CheckOpt from '../checkOpt';
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
 import { useCanaisStore } from '../../store';
-import { useTotalRegisters } from '../../hooks';
+import {TotalRegistersContext}  from '../../context/totalRegisterContext';
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -34,9 +34,7 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [content, setContent] = useState<DataCanais[]>([]);
-  const [tRin, setTRin] = useState(0);
-  const [tRout, setTRout] = useState(0);
-  useTotalRegisters(tRin, tRout);
+  const { setTotalRegisterIn, setTotalRegisterOut } = React.useContext(TotalRegistersContext);
 
   const filterCanais = useCanaisStore((state) => state.filterCanais);
 
@@ -126,23 +124,21 @@ export default function EnhancedTable() {
       let filteredRows = visibleRows.filter((row: any) => {
         return row.inOptInOut === true;
       })
-      console.log("ELIN ", filteredRows.length);
-      setTRin(filteredRows.length);
-      // setTRout(0);
+      setTotalRegisterIn(filteredRows.length);
       setVisibleRows(filteredRows);
       setContent(filteredRows);
     }else if(elOut && elVal){
       const filteredRows = visibleRows.filter((row: any) => {
         return row.inOptInOut === false;
       })
-      console.log("ELOUT ", filteredRows.length)
-      setTRout(filteredRows.length);
+      
+      setTotalRegisterOut(filteredRows.length);
       setVisibleRows(filteredRows);
       setContent(filteredRows);
     }else{
       fetchCanais();
-      setTRout(0);
-      setTRin(0);
+      setTotalRegisterIn(0);
+      setTotalRegisterOut(0);
     }
 
   }
@@ -151,7 +147,6 @@ export default function EnhancedTable() {
   },[])
 
   useEffect(() => {
-    // console.log(`order: ${order}, orderBy: ${orderBy}, page: ${page}, rowsPerPage: ${rowsPerPage}`)
     setVisibleRows(stableSort(content, getComparator(order, orderBy)).slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,

@@ -90,8 +90,7 @@ export default function FormOpt () {
         };
 
         let filter: any = handleSendData(dataSubmit.dataInicio, dataSubmit.dataFim, dataSubmit.cpfCnpj, dataSubmit.telephone);
-        console.log('FILTER HERE', filter);
-        
+        // TODO: change here to setFilter to send data to api
         setFilter(filter);
         
       } else {
@@ -102,12 +101,6 @@ export default function FormOpt () {
     const validateInputs = (date_init: string, date_end: string, cpf_cnpj: string, telefone: string) => {
       let isValid = true;
 
-      // Validate DATE_INIT and DATE_END
-      // if (!date_init.trim() || !date_end.trim()) {
-      //   setSendData((prevState) => ({ ...prevState, errorDate: { date_init_error: MSG_ERRORS.date_init_error, date_end_error: MSG_ERRORS.date_end_error }}));
-      //   isValid = false;
-      // }
-
       if (date_init && date_end && new Date(date_end) < new Date(date_init)) {
         setSendData((prevState) => ({ ...prevState, errorDate: { date_90_error: MSG_ERRORS.date_between_error } }));
         isValid = false;
@@ -117,23 +110,11 @@ export default function FormOpt () {
         setSendData((prevState) => ({ ...prevState, errorDate: { date_90_error: MSG_ERRORS.date_90_error } }));
         isValid = false;
       }
-    
-      // Validate CPF/CNPJ
-      // if (!cpf_cnpj.trim()) {
-      //   setErrors((prevState) => ({ ...prevState, cpfCnpjE: { ...prevState.cpfCnpjE, cpf_cnpj_error: MSG_ERRORS.cpf_cnpj_required, error: MSG_ERRORS.msg_bool } }));
-      //   isValid = false;
-      // }
 
       if (cpf_cnpj && !isCpfCnpjValid(cpf_cnpj)) {
         setErrors((prevState) => ({ ...prevState, cpfCnpjE: { ...prevState.cpfCnpjE, cpf_cnpj_error: MSG_ERRORS.cpf_cnpj_invalid, error: MSG_ERRORS.msg_bool } }));
         isValid = false;
       }
-    
-      // Validate TELEFONE
-      // if (!telefone.trim()) {
-      //   setErrors((prevState:any) => ({ ...prevState, phoneE: { ...prevState.phoneE, phone_error: MSG_ERRORS.phone_error, error: MSG_ERRORS.msg_bool } }));
-      //   isValid = false;
-      // }
       
       return { isValid };
     }

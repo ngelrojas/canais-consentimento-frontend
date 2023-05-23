@@ -4,7 +4,7 @@ import CardOpt from '../../components/cardOpt';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useCanaisStore } from '../../store';
-import {TotalRegistersContext}  from '../../context/totalRegisterContext';
+import {TotalRegistersContext}  from '../../context/overView';
 import { LABEL_HOME } from '../../constants';
 
 export default function ListCardsInOut () {

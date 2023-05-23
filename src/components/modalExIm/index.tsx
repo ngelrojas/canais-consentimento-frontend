@@ -10,6 +10,7 @@ import { MdClear } from "react-icons/md";
 import Grid from '@mui/material/Grid';
 import ListFile from '../listFile';
 import { MSG_MENUBAR } from '../../constants';
+import {TotalRegistersContext}  from '../../context/overView';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -29,8 +30,18 @@ export default function ModalExpImp({children, title, subtitle}: any) {
   const [open, setOpen] = React.useState(false);
   const [countFile, setCountFile] = React.useState(0);
   const [nameFile, setNameFile] = React.useState('');
+  const { exportData } = React.useContext(TotalRegistersContext);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if(title == MSG_MENUBAR.titleExport) {
+      // create a message when data not selected
+      // reset data when modal is closed
+      exportData.map((data:any) => {
+        console.log(`data = ${JSON.stringify(data)}`)
+      })
+    }
+    setOpen(true)
+  };
   const handleClose = () => {
     setOpen(false);
     setCountFile(0);

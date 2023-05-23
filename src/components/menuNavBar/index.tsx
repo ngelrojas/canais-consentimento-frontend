@@ -75,7 +75,7 @@ export default function MenuNavBar() {
               </ModalExpImp>
 
               <ModalExpImp title={MSG_MENUBAR.titleExport} subtitle={MSG_MENUBAR.titleMailing}>
-              <AiOutlineUpload fontSize={25} /> <Span>{MSG_MENUBAR.titleExport} {MSG_MENUBAR.titleMailing}</Span>
+                <AiOutlineUpload fontSize={25} /> <Span>{MSG_MENUBAR.titleExport} {MSG_MENUBAR.titleMailing}</Span>
               </ModalExpImp>
               
             </Box>

@@ -24,7 +24,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import CheckOpt from '../checkOpt';
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
 import { useCanaisStore } from '../../store';
-import {TotalRegistersContext}  from '../../context/totalRegisterContext';
+import {TotalRegistersContext}  from '../../context/overView';
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -34,7 +34,7 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [content, setContent] = useState<DataCanais[]>([]);
-  const { setTotalRegisterIn, setTotalRegisterOut } = React.useContext(TotalRegistersContext);
+  const { setTotalRegisterIn, setTotalRegisterOut, setExportData } = React.useContext(TotalRegistersContext);
 
   const filterCanais = useCanaisStore((state) => state.filterCanais);
 
@@ -56,7 +56,10 @@ export default function EnhancedTable() {
     
     if (event.target.checked) {
       const newSelected = content.map((n:any) => n.cpfCnpj);
-
+      content.map((n:any) => {
+        console.log(`row = ${JSON.stringify(n)}`)
+      })
+      setExportData(content);
       setSelected(newSelected);
       return;
     }

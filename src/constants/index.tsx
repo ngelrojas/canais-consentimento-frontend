@@ -95,3 +95,8 @@ export const CREDENTIALS = {
     userName: import.meta.env.VITE_APP_USERNAME,
     password: import.meta.env.VITE_APP_PASSWORD,
 }
+
+export const MODAL_MSG = {
+    alertMsg: 'Nenhum dado selecionado para exportação',
+    btnMsg: 'DESCARREGAR'
+}

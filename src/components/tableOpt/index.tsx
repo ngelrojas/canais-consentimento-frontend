@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -24,7 +23,8 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { AiOutlineSearch } from 'react-icons/ai';
 import CheckOpt from '../checkOpt';
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
-import { useFilterCanais } from '../../hooks';
+import { useCanaisStore } from '../../store';
+import {TotalRegistersContext}  from '../../context/overView';
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
@@ -32,14 +32,11 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [content, setContent] = useState<DataCanais[]>([]);
+  const { setTotalRegisterIn, setTotalRegisterOut, setExportData } = React.useContext(TotalRegistersContext);
 
-  let dataInicio = '2023-01-01T03:00:00.000Z';
-  let dataFim = '2023-03-01T03:00:00.000Z';
-  const filter = `dataInicio=${dataInicio}&dataFim=${dataFim}`;
-  // const filter = ''
-  const filterCanais = useFilterCanais(filter);
+  const filterCanais = useCanaisStore((state) => state.filterCanais);
 
   const fetchCanais = () => {
     const _content = filterCanais ? filterCanais.data[0]?.dados.content : [];
@@ -59,7 +56,10 @@ export default function EnhancedTable() {
     
     if (event.target.checked) {
       const newSelected = content.map((n:any) => n.cpfCnpj);
-
+      content.map((n:any) => {
+        console.log(`row = ${JSON.stringify(n)}`)
+      })
+      setExportData(content);
       setSelected(newSelected);
       return;
     }
@@ -117,7 +117,6 @@ export default function EnhancedTable() {
       })
       setVisibleRows(filteredRows);
       setContent(filteredRows);
-      // content = filteredRows;
     }
     
   }
@@ -125,19 +124,24 @@ export default function EnhancedTable() {
   const handleCheckOut = (elIn: any, elOut:any, elVal:any) => {
     
     if(elIn && elVal){
-      const filteredRows = visibleRows.filter((row: any) => {
+      let filteredRows = visibleRows.filter((row: any) => {
         return row.inOptInOut === true;
       })
+      setTotalRegisterIn(filteredRows.length);
       setVisibleRows(filteredRows);
       setContent(filteredRows);
     }else if(elOut && elVal){
       const filteredRows = visibleRows.filter((row: any) => {
         return row.inOptInOut === false;
       })
+      
+      setTotalRegisterOut(filteredRows.length);
       setVisibleRows(filteredRows);
       setContent(filteredRows);
     }else{
       fetchCanais();
+      setTotalRegisterIn(0);
+      setTotalRegisterOut(0);
     }
 
   }
@@ -146,14 +150,11 @@ export default function EnhancedTable() {
   },[])
 
   useEffect(() => {
-    
     setVisibleRows(stableSort(content, getComparator(order, orderBy)).slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,
     ));
-  }, 
-  // []
-  [content, order, orderBy, page, rowsPerPage]
+  }, [content, order, orderBy, page, rowsPerPage]
   );
   
   return (
@@ -255,7 +256,7 @@ export default function EnhancedTable() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 20, 35]}
           component="div"
           count={content.length}
           rowsPerPage={rowsPerPage}

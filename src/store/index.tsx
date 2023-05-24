@@ -1,10 +1,8 @@
 import { create } from 'zustand';
-import { CanaisStore, LoginStore } from '../services';
+import { CanaisStore, LoginStore, TotalRegisters } from '../services';
 
 export const useCanaisStore = create<CanaisStore>((set) => ({
-  totalCanais: null,
   filterCanais: null,
-  setTotalCanais: (data) => set(() => ({ totalCanais: data })),
   setFilterCanais: (data) => set(() => ({ filterCanais: data })),
 }));
 
@@ -13,4 +11,11 @@ export const useLoginStore = create<LoginStore>((set) => ({
   password: '',
   resp: null,
   setToken: (data) => set(() => ({ resp: data })),
+}));
+
+export const useTotalRegister = create<TotalRegisters>((set) => ({
+  totalIn: 0,
+  totalOut: 0,
+  setTotalIn: (data) => set(() => ({ totalIn: data })),
+  setTotalOut: (data) => set(() => ({ totalOut: data })),
 }));

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Canais } from '../services/service.canais';
 import { Login } from '../services/service.login';
-// import { getToken } from '../services/service.login';
 import { useCanaisStore, useLoginStore } from '../store';
 import { LocalStorageService } from '../services/service.token';
 
@@ -37,17 +36,3 @@ export const useLogin = (userName: string, password: string) => {
   
   return resp;
 };
-
-// export const useLogin = (userName: string, password: string) => {
-//   const { resp, setToken } = useLoginStore();
-//   useEffect(() => {
-//     const fetchLogin = async () => {
-//       const data = await getToken(userName, password);
-//       console.log(data);
-//       setToken(data);
-//     };
-//     fetchLogin();
-//   }, []);
-
-//   return resp;
-// };

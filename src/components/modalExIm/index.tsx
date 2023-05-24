@@ -10,6 +10,11 @@ import { MdClear } from "react-icons/md";
 import Grid from '@mui/material/Grid';
 import ListFile from '../listFile';
 import { MSG_MENUBAR } from '../../constants';
+import {TotalRegistersContext}  from '../../context/overView';
+// import JSONToCSV  from 'react-json-to-csv';
+import { JsonToCSV } from './styles';
+import { MODAL_MSG } from '../../constants';
+import TextField from '@mui/material/TextField';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -29,12 +34,40 @@ export default function ModalExpImp({children, title, subtitle}: any) {
   const [open, setOpen] = React.useState(false);
   const [countFile, setCountFile] = React.useState(0);
   const [nameFile, setNameFile] = React.useState('');
+  const [isExport, setIsExport] = React.useState(false);
+  const { exportData } = React.useContext(TotalRegistersContext);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if(title == MSG_MENUBAR.titleExport) {
+      // create a message when data not selected
+      // reset data when modal is closed
+      console.log(`exportData = ${exportData.length}`)
+      if(exportData.length > 0) {
+        setOpen(true);
+        setIsExport(true);
+      }else{
+        alert(MODAL_MSG.alertMsg);
+        setIsExport(false);
+      }
+    }else if(title == MSG_MENUBAR.titleImport) {
+      setOpen(true)
+    }else{
+      setOpen(false);
+    }
+  };
+
+  const handleChange = (e: any) => {
+    console.log(e.target.value);
+  }
+
   const handleClose = () => {
     setOpen(false);
     setCountFile(0);
     setNameFile('');
+  }
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
   }
 
   const handleFile = (e: any) => {
@@ -62,7 +95,7 @@ export default function ModalExpImp({children, title, subtitle}: any) {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <form method='post'>
+            <form onSubmit={handleSubmit}>
                 <Box sx={{display: 'flex', justifyContent: 'flex-end', marginBottom: '10%'}}>
                     <Typography sx={{paddingRight: '35%'}} id="transition-modal-title" variant="h6" component="h2">
                         {title} {subtitle}
@@ -71,6 +104,17 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                     <IconButton onClick={handleClose}><MdClear color='white' /></IconButton>
                 </Box>
                 <Box sx={{paddingTop: '1%', paddingBottom: '1%'}}>
+                  { isExport ? (
+                    <Grid>
+                    <TextField
+                      id="filled-search"
+                      label="Nome do arquivo"
+                      type="search"
+                      variant="filled"
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  ):(
                     <Grid container>
                         <Grid md={6}>
                             <Button sx={{color: 'white'}} variant="outlined" component="label">
@@ -81,11 +125,22 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                         <Grid md={6}>
                             <ListFile countFile={countFile} nameFile={nameFile} />
                         </Grid>
-
                     </Grid>
+                  )}
                 </Box>
+                
                 <Box sx={{marginTop: '10%', marginBottom: '2%', display: 'flex', justifyContent: 'center'}}>
-                    <Button variant='outlined' sx={{color: 'white', mr: 5}} type="submit">{title}</Button>
+                { isExport ? (
+                  
+                  <JsonToCSV
+                    data={exportData}
+                    filename="export.csv"
+                    delimiter=','
+                  />
+              ):(
+                <Button variant='outlined' sx={{color: 'white', mr: 5}} type="submit">{title}</Button>
+              )}
+                    
                     <Button variant='outlined' sx={{color: 'red'}} type="reset" onClick={handleClose}>{MSG_MENUBAR.close}</Button>
                 </Box>
             </form>

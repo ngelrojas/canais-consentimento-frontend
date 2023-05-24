@@ -18,8 +18,12 @@ import { MSG_ERRORS, LABEL_FORM } from '../../constants';
 import { AiOutlinePhone, AiOutlinePicRight } from 'react-icons/ai';
 import { MsgError, Form, ContainerData } from '../../styles/form.style';
 import Button from '@mui/material/Button';
+import { useFilterCanais } from '../../hooks';
+import { handleSendData } from '../../utils';
 
 export default function FormOpt () {
+    const [filter, setFilter] = useState<string>('');
+    useFilterCanais(filter);
     const [sendData, setSendData] = useState<{dateOpt: DateOpt, dataOpt: DataOpt, errorDate: ErrorDate}>({
         dateOpt: {date_init: '', date_end: ''},
         dataOpt: {textmask: '', numberformat: ''},
@@ -79,13 +83,16 @@ export default function FormOpt () {
         let formatCpfCnpj = FormatCpfCnpj(dataOpt.textmask);
         
         const dataSubmit: DataSubmit = {
-          date_init: dateOpt.date_init,
-          date_end: dateOpt.date_end,
-          cpf_cnpj: formatCpfCnpj,
+          dataInicio: dateOpt.date_init,
+          dataFim: dateOpt.date_end,
+          cpfCnpj: formatCpfCnpj,
           telephone: formatPhone,
         };
-        console.log('data submit => ', dataSubmit);
-        // Do something here to submit the form
+
+        let filter: any = handleSendData(dataSubmit.dataInicio, dataSubmit.dataFim, dataSubmit.cpfCnpj, dataSubmit.telephone);
+        // TODO: change here to setFilter to send data to api
+        setFilter(filter);
+        
       } else {
         console.log("Form data is invalid, please fix the errors:");
       }
@@ -93,12 +100,6 @@ export default function FormOpt () {
     
     const validateInputs = (date_init: string, date_end: string, cpf_cnpj: string, telefone: string) => {
       let isValid = true;
-
-      // Validate DATE_INIT and DATE_END
-      if (!date_init.trim() || !date_end.trim()) {
-        setSendData((prevState) => ({ ...prevState, errorDate: { date_init_error: MSG_ERRORS.date_init_error, date_end_error: MSG_ERRORS.date_end_error }}));
-        isValid = false;
-      }
 
       if (date_init && date_end && new Date(date_end) < new Date(date_init)) {
         setSendData((prevState) => ({ ...prevState, errorDate: { date_90_error: MSG_ERRORS.date_between_error } }));
@@ -109,20 +110,9 @@ export default function FormOpt () {
         setSendData((prevState) => ({ ...prevState, errorDate: { date_90_error: MSG_ERRORS.date_90_error } }));
         isValid = false;
       }
-    
-      // Validate CPF/CNPJ
-      if (!cpf_cnpj.trim()) {
-        setErrors((prevState) => ({ ...prevState, cpfCnpjE: { ...prevState.cpfCnpjE, cpf_cnpj_error: MSG_ERRORS.cpf_cnpj_required, error: MSG_ERRORS.msg_bool } }));
-        isValid = false;
-      }
+
       if (cpf_cnpj && !isCpfCnpjValid(cpf_cnpj)) {
         setErrors((prevState) => ({ ...prevState, cpfCnpjE: { ...prevState.cpfCnpjE, cpf_cnpj_error: MSG_ERRORS.cpf_cnpj_invalid, error: MSG_ERRORS.msg_bool } }));
-        isValid = false;
-      }
-    
-      // Validate TELEFONE
-      if (!telefone.trim()) {
-        setErrors((prevState:any) => ({ ...prevState, phoneE: { ...prevState.phoneE, phone_error: MSG_ERRORS.phone_error, error: MSG_ERRORS.msg_bool } }));
         isValid = false;
       }
       
@@ -207,7 +197,7 @@ export default function FormOpt () {
                             <TextField
                                 size='small'
                                 label={LABEL_FORM.phone}
-                                value={sendData.dataOpt.numberformat || null}
+                                value={sendData.dataOpt.numberformat}
                                 onChange={handleTelephone}
                                 name="numberformat"
                                 id="telefone-opt"

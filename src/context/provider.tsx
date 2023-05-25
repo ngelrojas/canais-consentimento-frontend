@@ -1,22 +1,22 @@
 import React from "react";
-import {TotalRegistersContext} from "./overView";
+import { Context } from "./overView";
 
-export const TotalRegistersContextProvider = ({ children }: any) => {
-    const [totalRegisterIn, setTotalRegisterIn] = React.useState<number>(0);
-    const [totalRegisterOut, setTotalRegisterOut] = React.useState<number>(0);
-    const [exportData, setExportData] = React.useState<any>([]);
+export const ContextProvider = ({ children }: any) => {
+  const [totalRegisterIn, setTotalRegisterIn] = React.useState<number>(0);
+  const [totalRegisterOut, setTotalRegisterOut] = React.useState<number>(0);
+  const [exportData, setExportData] = React.useState<any>([]);
+
+  return (
+    <Context.Provider
+      value={{ 
+        totalRegisterIn, setTotalRegisterIn,
+        totalRegisterOut, setTotalRegisterOut, 
+        exportData, setExportData 
+      }}>
+      {children}
+    </Context.Provider>
+  );
+};
   
-    return (
-      <TotalRegistersContext.Provider
-        value={{ 
-          totalRegisterIn, totalRegisterOut, 
-          setTotalRegisterIn, setTotalRegisterOut, 
-          exportData, setExportData }}
-      >
-        {children}
-      </TotalRegistersContext.Provider>
-    );
-  };
-  
-export const TotalRegistersContextConsumer = TotalRegistersContext.Consumer;
+export const ContextConsumer = Context.Consumer;
   

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import ButtonSubmit from "../button";
 import FormControl from '@mui/material/FormControl';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -24,6 +24,7 @@ import { handleSendData } from '../../utils';
 export default function FormOpt () {
     const [filter, setFilter] = useState<string>('');
     useFilterCanais(filter);
+
     const [sendData, setSendData] = useState<{dateOpt: DateOpt, dataOpt: DataOpt, errorDate: ErrorDate}>({
         dateOpt: {date_init: '', date_end: ''},
         dataOpt: {textmask: '', numberformat: ''},
@@ -89,9 +90,10 @@ export default function FormOpt () {
           telephone: formatPhone,
         };
 
-        let filter: any = handleSendData(dataSubmit.dataInicio, dataSubmit.dataFim, dataSubmit.cpfCnpj, dataSubmit.telephone);
+        let dataFilter: any = handleSendData(dataSubmit.dataInicio, dataSubmit.dataFim, dataSubmit.cpfCnpj, dataSubmit.telephone);
         // TODO: change here to setFilter to send data to api
-        setFilter(filter);
+        console.log(`sending data to api: ${JSON.stringify(dataFilter)}`)
+        setFilter(dataFilter);
         
       } else {
         console.log("Form data is invalid, please fix the errors:");

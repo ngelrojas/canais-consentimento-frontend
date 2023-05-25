@@ -4,12 +4,12 @@ import CardOpt from '../../components/cardOpt';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useCanaisStore } from '../../store';
-import {TotalRegistersContext}  from '../../context/overView';
+import { Context }  from '../../context/overView';
 import { LABEL_HOME } from '../../constants';
 
 export default function ListCardsInOut () {
     let totalCanais = useCanaisStore((state) => state.filterCanais);
-    const {totalRegisterIn, totalRegisterOut} = React.useContext(TotalRegistersContext);
+    const {totalRegisterIn, totalRegisterOut} = React.useContext(Context);
 
     return(
 
@@ -23,11 +23,11 @@ export default function ListCardsInOut () {
                             
                         </Typography>
                         <Typography sx={{justifyContent: 'center'}} variant="h2" >
-                            {totalCanais ? totalCanais.data[0]?.dados.totalElements : 0}
+                            {totalCanais ? totalCanais.totalElements : 0}
                         </Typography>
                     </CardOpt>      
                 </Grid>
-                <Grid xs={12} md={4} >
+                <Grid xs={12} md={4}>
                     <CardOpt>
                         <Typography sx={{justifyContent: 'center'}} variant="subtitle1" >
                         

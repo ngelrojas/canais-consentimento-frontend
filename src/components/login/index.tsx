@@ -7,6 +7,6 @@ export function LoginOpt(){
     // const localStorageService = new LocalStorageService();
     // const token = response?.data.token || '';
     // localStorageService.setItem('token', token);
-    return <span />;
+    return <></>;
 }
 

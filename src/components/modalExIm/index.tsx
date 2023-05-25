@@ -10,7 +10,7 @@ import { MdClear } from "react-icons/md";
 import Grid from '@mui/material/Grid';
 import ListFile from '../listFile';
 import { MSG_MENUBAR } from '../../constants';
-import {TotalRegistersContext}  from '../../context/overView';
+import { Context }  from '../../context/overView';
 import { JsonToCSV } from './styles';
 import { MODAL_MSG } from '../../constants';
 import TextField from '@mui/material/TextField';
@@ -36,7 +36,7 @@ export default function ModalExpImp({children, title, subtitle}: any) {
   const [countFile, setCountFile] = React.useState(1);
   const [nameFile, setNameFile] = React.useState(GetCurrentDateTime);
   const [isExport, setIsExport] = React.useState(false);
-  const { exportData } = React.useContext(TotalRegistersContext);
+  const { exportData } = React.useContext(Context);
 
   const handleOpen = () => {
     if(title === MSG_MENUBAR.titleExport) {

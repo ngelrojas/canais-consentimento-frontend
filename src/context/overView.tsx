@@ -1,3 +1,3 @@
 import React from "react";
 
-export const TotalRegistersContext = React.createContext({} as any);
+export const Context = React.createContext({} as any);

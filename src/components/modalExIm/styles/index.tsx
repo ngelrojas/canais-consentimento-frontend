@@ -2,6 +2,7 @@ import styled from "styled-components";
 import JSONToCSV  from 'react-json-to-csv';
 import { MODAL_MSG } from "../../../constants";
 
+
 export const JsonToCSV = styled(JSONToCSV)`
     visibility: hidden;
     :after{
@@ -16,3 +17,4 @@ export const JsonToCSV = styled(JSONToCSV)`
         margin-left: -90px;
     }      
 `
+

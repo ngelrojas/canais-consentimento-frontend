@@ -92,3 +92,19 @@ export function handleSendData (date_init: any, date_end: any, cpf_cnpj: string,
         return filter = ''
     }
 }
+
+export function getCurrentDateTime() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    const date = currentDate.getDate();
+    const dateString = `${year}-${month}-${date}`; 
+
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+    const seconds = currentDate.getSeconds();
+    const timeString = `${hours}:${minutes}:${seconds}`; 
+
+    const currentDateTimeString = `${dateString} ${timeString}`;
+    return currentDateTimeString;
+}

@@ -17,6 +17,7 @@ export default function ListFile({countFile, nameFile}: any) {
         position: 'relative',
         overflow: 'auto',
         maxHeight: 300,
+        borderLeft: '1px solid #F9DD17',
         '& ul': { padding: 0 },
       }}
       subheader={<li />}

@@ -121,7 +121,7 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                         />
                         </Box>
                       </Grid>
-                      <Grid sx={{ marginLeft: '15%'}}>
+                      <Grid sx={{ marginLeft: '10%'}}>
                         <ListFile countFile={countFile} nameFile={nameFile} />
                       </Grid>
                   </Grid>
@@ -150,7 +150,7 @@ export default function ModalExpImp({children, title, subtitle}: any) {
               ):(
                     <Button variant='outlined' sx={{color: 'white', mr: 5}} type="submit">{title}</Button>)}
                     
-                    <Button variant='outlined' sx={{color: 'orange'}} type="reset" onClick={handleClose}>{MSG_MENUBAR.close}</Button>
+                    <Button variant='outlined' sx={{color: '#F9DD17'}} type="reset" onClick={handleClose}>{MSG_MENUBAR.close}</Button>
                 </Box>
             </form>
           </Box>

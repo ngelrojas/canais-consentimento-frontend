@@ -11,10 +11,10 @@ import Grid from '@mui/material/Grid';
 import ListFile from '../listFile';
 import { MSG_MENUBAR } from '../../constants';
 import {TotalRegistersContext}  from '../../context/overView';
-// import JSONToCSV  from 'react-json-to-csv';
 import { JsonToCSV } from './styles';
 import { MODAL_MSG } from '../../constants';
 import TextField from '@mui/material/TextField';
+import { getCurrentDateTime } from '../../utils';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -31,17 +31,16 @@ const style = {
 };
 
 export default function ModalExpImp({children, title, subtitle}: any) {
+  let GetCurrentDateTime = getCurrentDateTime();
   const [open, setOpen] = React.useState(false);
-  const [countFile, setCountFile] = React.useState(0);
-  const [nameFile, setNameFile] = React.useState('');
+  const [countFile, setCountFile] = React.useState(1);
+  const [nameFile, setNameFile] = React.useState(GetCurrentDateTime);
   const [isExport, setIsExport] = React.useState(false);
   const { exportData } = React.useContext(TotalRegistersContext);
 
   const handleOpen = () => {
-    if(title == MSG_MENUBAR.titleExport) {
-      // create a message when data not selected
-      // reset data when modal is closed
-      console.log(`exportData = ${exportData.length}`)
+    if(title === MSG_MENUBAR.titleExport) {
+      
       if(exportData.length > 0) {
         setOpen(true);
         setIsExport(true);
@@ -49,7 +48,8 @@ export default function ModalExpImp({children, title, subtitle}: any) {
         alert(MODAL_MSG.alertMsg);
         setIsExport(false);
       }
-    }else if(title == MSG_MENUBAR.titleImport) {
+
+    }else if(title === MSG_MENUBAR.titleImport) {
       setOpen(true)
     }else{
       setOpen(false);
@@ -57,13 +57,16 @@ export default function ModalExpImp({children, title, subtitle}: any) {
   };
 
   const handleChange = (e: any) => {
-    console.log(e.target.value);
+    let fileName = e.target.value;
+    if(fileName.length > 0) {
+      setNameFile(fileName.replace(/\s/g, '-'));
+    }else{
+      setNameFile(GetCurrentDateTime);
+    }
   }
 
   const handleClose = () => {
     setOpen(false);
-    setCountFile(0);
-    setNameFile('');
   }
 
   const handleSubmit = (e: any) => {
@@ -74,7 +77,7 @@ export default function ModalExpImp({children, title, subtitle}: any) {
     setCountFile(e.target.files.length);
     setNameFile(e.target.files[0].name);
   }
-
+// TODO: check method for export data and import data, maybe use the same componet for both
   return (
     <div>
         <Button onClick={handleOpen} sx={{color: '#F9DD17', textTransform: 'capitalize'}} variant='text'>
@@ -105,24 +108,32 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                 </Box>
                 <Box sx={{paddingTop: '1%', paddingBottom: '1%'}}>
                   { isExport ? (
-                    <Grid>
-                    <TextField
-                      id="filled-search"
-                      label="Nome do arquivo"
-                      type="search"
-                      variant="filled"
-                      onChange={handleChange}
-                    />
+                    <Grid sx={{display: 'flex', justifyContent: 'center'}}>
+                      <Grid sx={{justifyContent: 'flex-start'}}>
+                        <Box sx={{marginRight: '15%', marginTop: '22%'}}>
+
+                        <TextField
+                          id="rename-file"
+                          label="Nome do arquivo"
+                          type="search"
+                          variant="standard"
+                          onChange={handleChange}
+                        />
+                        </Box>
+                      </Grid>
+                      <Grid sx={{ marginLeft: '10%'}}>
+                        <ListFile countFile={countFile} nameFile={nameFile} />
+                      </Grid>
                   </Grid>
                   ):(
                     <Grid container>
-                        <Grid md={6}>
+                        <Grid >
                             <Button sx={{color: 'white'}} variant="outlined" component="label">
                                 <span>{MSG_MENUBAR.titleUploadFile}</span>
                                 <input onChange={handleFile} hidden accept={".pdf"} multiple type={"file"} />
                             </Button>
                         </Grid>
-                        <Grid md={6}>
+                        <Grid >
                             <ListFile countFile={countFile} nameFile={nameFile} />
                         </Grid>
                     </Grid>
@@ -131,17 +142,15 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                 
                 <Box sx={{marginTop: '10%', marginBottom: '2%', display: 'flex', justifyContent: 'center'}}>
                 { isExport ? (
-                  
-                  <JsonToCSV
-                    data={exportData}
-                    filename="export.csv"
-                    delimiter=','
-                  />
+                    <JsonToCSV
+                      data={exportData}
+                      filename={`${nameFile}.csv`}
+                      delimiter=','
+                    />
               ):(
-                <Button variant='outlined' sx={{color: 'white', mr: 5}} type="submit">{title}</Button>
-              )}
+                    <Button variant='outlined' sx={{color: 'white', mr: 5}} type="submit">{title}</Button>)}
                     
-                    <Button variant='outlined' sx={{color: 'red'}} type="reset" onClick={handleClose}>{MSG_MENUBAR.close}</Button>
+                    <Button variant='outlined' sx={{color: '#F9DD17'}} type="reset" onClick={handleClose}>{MSG_MENUBAR.close}</Button>
                 </Box>
             </form>
           </Box>

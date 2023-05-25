@@ -13,7 +13,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import Switch from '@mui/material/Switch';
 import { Order, MSG_TABLE_FILTER } from '../../constants';
-import { DataCanais } from '../../services';
+import { DataCanais, DataImport } from '../../services';
 import { getComparator, stableSort } from '../../utils';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
@@ -35,6 +35,7 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [content, setContent] = useState<DataCanais[]>([]);
   const { setTotalRegisterIn, setTotalRegisterOut, setExportData } = React.useContext(TotalRegistersContext);
+  const [eachData, setEachData] = React.useState<DataImport[]>([]);
 
   const filterCanais = useCanaisStore((state) => state.filterCanais);
 
@@ -56,22 +57,28 @@ export default function EnhancedTable() {
     
     if (event.target.checked) {
       const newSelected = content.map((n:any) => n.cpfCnpj);
-      content.map((n:any) => {
-        console.log(`row = ${JSON.stringify(n)}`)
-      })
+      
       setExportData(content);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
+    setExportData([]);
   };
+
+  const handleRecoverData = (cpfCnpj: string) => {
+    const filterObj = content.filter((el:any) => el.cpfCnpj === cpfCnpj);
+      setEachData((prevObj) => [...prevObj, ...filterObj]) 
+      return;
+  }
 
   const handleClick = (event: React.MouseEvent<unknown>, cpfCnpj: string) => {
     const selectedIndex = selected.indexOf(cpfCnpj);
     let newSelected: readonly string[] = [];
-    
+
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, cpfCnpj);
+      handleRecoverData(cpfCnpj);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -82,7 +89,6 @@ export default function EnhancedTable() {
         selected.slice(selectedIndex + 1),
       );
     }
-
     setSelected(newSelected);
   };
 
@@ -146,8 +152,11 @@ export default function EnhancedTable() {
 
   }
   useEffect(() => {
+    if(eachData.length > 0){
+      setExportData(eachData);
+    }
     fetchCanais();
-  },[])
+  },[eachData])
 
   useEffect(() => {
     setVisibleRows(stableSort(content, getComparator(order, orderBy)).slice(
@@ -159,7 +168,6 @@ export default function EnhancedTable() {
   
   return (
     <Box sx={{ width: '100%' }}>
-
       <Box sx={{flexGrow: 1}}>
         <Grid2 container spacing={2}>
 

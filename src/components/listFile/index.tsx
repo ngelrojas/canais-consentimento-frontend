@@ -17,6 +17,7 @@ export default function ListFile({countFile, nameFile}: any) {
         position: 'relative',
         overflow: 'auto',
         maxHeight: 300,
+        borderLeft: '1px solid #F9DD17',
         '& ul': { padding: 0 },
       }}
       subheader={<li />}
@@ -24,16 +25,15 @@ export default function ListFile({countFile, nameFile}: any) {
         <li >
             {countFile > 0 ? 
             <ul>
-            <ListSubheader sx={{bgcolor: '#0038A7', color: 'white'}}></ListSubheader>
+            <ListSubheader sx={{bgcolor: '#0038A7', color: 'white'}}>CSV | NOME DE ARQUIVO</ListSubheader>
             
                 <ListItem >
-                    <ListItemIcon>
+                    <ListItemIcon sx={{color: 'white'}}>
                         <MdInsertDriveFile size={30} />
                     </ListItemIcon>
                     <ListItemText
                         sx={{color: 'white'}} 
-                        primary={` ${nameFile}`} />
-                    
+                        primary={` ${nameFile}.csv`} />
                 </ListItem>
             
             </ul>: ''

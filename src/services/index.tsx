@@ -70,6 +70,16 @@ export interface DataCanais {
     inOptInOut: string,
 }
 
+export interface DataImport {
+    id?: string,
+    cpfCnpj: string,
+    telefone: string,
+    dataAtualizacao: string,
+    dataCriacao: string,
+    sistemaOrigem: string,
+    inOptInOut: string,
+}
+
 export interface HeadCell {
     disablePadding: boolean;
     id: keyof DataCanais;

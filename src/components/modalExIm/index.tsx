@@ -15,6 +15,7 @@ import { JsonToCSV } from './styles';
 import { MODAL_MSG } from '../../constants';
 import TextField from '@mui/material/TextField';
 import { getCurrentDateTime } from '../../utils';
+import FileUploadComponent from './fileUploadComponent';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -128,14 +129,15 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                   ):(
                     <Grid container>
                         <Grid >
-                            <Button sx={{color: 'white'}} variant="outlined" component="label">
+                            <FileUploadComponent />
+                            {/* <Button sx={{color: 'white'}} variant="outlined" component="label">
                                 <span>{MSG_MENUBAR.titleUploadFile}</span>
                                 <input onChange={handleFile} hidden accept={".pdf"} multiple type={"file"} />
-                            </Button>
+                            </Button> */}
                         </Grid>
-                        <Grid >
+                        {/* <Grid >
                             <ListFile countFile={countFile} nameFile={nameFile} />
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                   )}
                 </Box>

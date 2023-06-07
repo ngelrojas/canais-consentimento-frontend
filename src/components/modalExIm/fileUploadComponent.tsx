@@ -1,29 +1,74 @@
 import React, { ChangeEvent, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import ListFile from '../../components/listFile';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import Box from '@mui/material/Box';
+import { MSG_MENUBAR } from '../../constants';
 
-const FileUploadComponent: React.FC = () => {
+interface nameFileCSV {
+    name: string | undefined;
+    size: number | undefined;
+    type: string | undefined;
+    lastModified: number | undefined;
+    base64: string | undefined;
+}
+interface FileUploadComponentProps {
+    handleFileCSV: (file: nameFileCSV) => void;
+}
+
+const FileUploadComponent: React.FC<FileUploadComponentProps> = ({handleFileCSV}) => {
   const [base64String, setBase64String] = useState<string>('');
+  const [csvName, setCsvName] = useState<string>('');
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    console.log(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        console.log(base64);
-        setBase64String(base64);
-      };
-      reader.readAsDataURL(file);
+      const file = event.target.files?.[0];
+
+      let pasFileCsv:nameFileCSV = {
+        name: file?.name,
+        size: file?.size,
+        type: file?.type,
+        lastModified: file?.lastModified,
+        base64: ''
+      }
+      
+      if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              const base64 = reader.result as string;
+              pasFileCsv.base64 = base64;
+              setBase64String(base64);
+              handleFileCSV(pasFileCsv);
+              setCsvName(file?.name);
+        };
+        reader.readAsDataURL(file);
     }
   };
 
   return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
+    <Box sx={{display: 'flex'}}>
+        <Grid>
+            <label htmlFor='file-upload'>
+                <Fab
+                    color="primary"
+                    size="large"
+                    component="span"
+                    aria-label="add"
+                    variant="extended"
+                    sx={{marginTop: '15%', marginRight: '10%', paddingLeft: '15%',fontSize: '.80rem'}}
+                >
+                    <AddIcon /> {MSG_MENUBAR.titleUploadFile}
+                </Fab>
+                <input style={{display: 'none'}} id='file-upload' type="file" onChange={handleFileChange} />
+            </label>
+        </Grid>
+      
       {base64String && (
-        <img src={base64String} alt="Uploaded file" style={{ maxWidth: '100%' }} />
+        <Grid >
+            <ListFile countFile={1} nameFile={csvName} />
+        </Grid>
       )}
-    </div>
+    </Box>
   );
 };
 

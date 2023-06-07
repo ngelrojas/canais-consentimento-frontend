@@ -33,7 +33,9 @@ export default function ListFile({countFile, nameFile}: any) {
                     </ListItemIcon>
                     <ListItemText
                         sx={{color: 'white'}} 
-                        primary={` ${nameFile}.csv`} />
+                        primary={`${nameFile}`}/>
+                        
+                    
                 </ListItem>
             
             </ul>: ''

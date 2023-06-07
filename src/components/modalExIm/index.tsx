@@ -74,10 +74,16 @@ export default function ModalExpImp({children, title, subtitle}: any) {
     e.preventDefault();
   }
 
-  const handleFile = (e: any) => {
-    setCountFile(e.target.files.length);
-    setNameFile(e.target.files[0].name);
+  // const handleFile = (e: any) => {
+  //   setCountFile(e.target.files.length);
+  //   setNameFile(e.target.files[0].name);
+  // }
+
+  const onFileHandleUpload = (file: any) => {
+    console.log(`the file is ${file.base64}`);
+    
   }
+  
 // TODO: check method for export data and import data, maybe use the same componet for both
   return (
     <div>
@@ -127,17 +133,10 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                       </Grid>
                   </Grid>
                   ):(
-                    <Grid container>
+                    <Grid sx={{display: 'flex', justifyContent: 'center'}}>
                         <Grid >
-                            <FileUploadComponent />
-                            {/* <Button sx={{color: 'white'}} variant="outlined" component="label">
-                                <span>{MSG_MENUBAR.titleUploadFile}</span>
-                                <input onChange={handleFile} hidden accept={".pdf"} multiple type={"file"} />
-                            </Button> */}
+                            <FileUploadComponent handleFileCSV={onFileHandleUpload} />
                         </Grid>
-                        {/* <Grid >
-                            <ListFile countFile={countFile} nameFile={nameFile} />
-                        </Grid> */}
                     </Grid>
                   )}
                 </Box>

@@ -88,7 +88,7 @@ export const LABEL_HOME = {
 
 export const PATH = {
     urlLogin: '/oauth/login?APP_NAME=cg-user-app',
-    urlAPI: '/api/canais-consentimento/search',
+    urlAPI: '/api/canais-consentimento',
 }
 
 export const CREDENTIALS = {
@@ -99,4 +99,13 @@ export const CREDENTIALS = {
 export const MODAL_MSG = {
     alertMsg: 'Nenhum dado selecionado para exportação',
     btnMsg: 'DESCARREGAR'
+}
+
+export const MODAL_MSG_TEXT = {
+    title_file: 'NOME DE ARQUIVO',
+    title_csv: 'ARQUIVO CSV',
+}
+
+export const LABEL_MSG = {
+    text_import: 'Renomear arquivo',
 }

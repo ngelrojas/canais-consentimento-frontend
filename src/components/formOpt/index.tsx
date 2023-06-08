@@ -79,7 +79,7 @@ export default function FormOpt () {
         dataOpt.numberformat
       );
       if (isValid) {
-        console.log("Form data is valid, submitting...");
+        // console.log("Form data is valid, submitting...");
         let formatPhone = FormatPhone(dataOpt.numberformat);
         let formatCpfCnpj = FormatCpfCnpj(dataOpt.textmask);
         
@@ -92,11 +92,11 @@ export default function FormOpt () {
 
         let dataFilter: any = handleSendData(dataSubmit.dataInicio, dataSubmit.dataFim, dataSubmit.cpfCnpj, dataSubmit.telephone);
         // TODO: change here to setFilter to send data to api
-        console.log(`sending data to api: ${JSON.stringify(dataFilter)}`)
+        // console.log(`sending data to api: ${JSON.stringify(dataFilter)}`)
         setFilter(dataFilter);
         
       } else {
-        console.log("Form data is invalid, please fix the errors:");
+        // console.log("Form data is invalid, please fix the errors:");
       }
     };
     

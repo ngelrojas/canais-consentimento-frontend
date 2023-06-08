@@ -8,7 +8,7 @@ import { LocalStorageService } from '../services/service.token';
 export const useFilterCanais = (filter: any) => {
   const { filterCanais, setFilterCanais } = useCanaisStore();
   const token = new LocalStorageService().getItem('token');
-  console.log(`TODO: the filter is comming = `, filter);
+  
   useEffect(() => {
     const fetchFilterCanais = async () => {
       const canais = new Canais(token);

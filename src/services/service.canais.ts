@@ -15,13 +15,22 @@ export class Canais {
     * @param: filter: any
     */
     public async getFilterCanais (filter: any) {
-        this.response = await API.get(`${PATH.urlAPI}?${filter}`, {
+        this.response = await API.get(`${PATH.urlAPI}/search?${filter}`, {
                 headers: {
                     Authorization: `Bearer ${this.token}`
                 }
             }
         );
         return this.response; 
+    }
+
+    public async sendFileCanais (file: any) {
+        this.response = await API.post(`${PATH.urlAPI}/import-mailing/`, file, {
+                headers: {
+                    Authorization: `Bearer ${this.token}`
+                }
+        });
+        return this.response;
     }
 
     public async getFilterCanaiss (filter: any) {

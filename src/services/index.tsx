@@ -126,3 +126,15 @@ export interface TotalRegisters {
     setTotalIn: (data: number) => void;
     setTotalOut: (data: number) => void;
 }
+
+export interface nameFileCSV {
+    name: string | undefined;
+    size: number | undefined;
+    type: string | undefined;
+    lastModified: number | undefined;
+    base64: string | undefined;
+}
+
+export interface FileUploadComponentProps {
+    handleFileCSV: (file: nameFileCSV) => void;
+}

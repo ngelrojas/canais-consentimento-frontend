@@ -5,17 +5,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import { MSG_MENUBAR } from '../../constants';
-
-interface nameFileCSV {
-    name: string | undefined;
-    size: number | undefined;
-    type: string | undefined;
-    lastModified: number | undefined;
-    base64: string | undefined;
-}
-interface FileUploadComponentProps {
-    handleFileCSV: (file: nameFileCSV) => void;
-}
+import { nameFileCSV, FileUploadComponentProps }  from '../../services';
 
 const FileUploadComponent: React.FC<FileUploadComponentProps> = ({handleFileCSV}) => {
   const [base64String, setBase64String] = useState<string>('');

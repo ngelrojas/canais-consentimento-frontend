@@ -12,10 +12,14 @@ import ListFile from '../listFile';
 import { MSG_MENUBAR } from '../../constants';
 import { Context }  from '../../context/overView';
 import { JsonToCSV } from './styles';
-import { MODAL_MSG } from '../../constants';
+import { MODAL_MSG, LABEL_MSG } from '../../constants';
 import TextField from '@mui/material/TextField';
 import { getCurrentDateTime } from '../../utils';
 import FileUploadComponent from './fileUploadComponent';
+import { Waveform } from '@uiball/loaders'
+import { Canais } from '../../services/service.canais';
+import { LocalStorageService } from '../../services/service.token';
+
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -33,11 +37,16 @@ const style = {
 
 export default function ModalExpImp({children, title, subtitle}: any) {
   let GetCurrentDateTime = getCurrentDateTime();
+  
+  const localStorageService = new LocalStorageService();
+  const canais = new Canais(localStorageService.getItem('token'));
+
   const [open, setOpen] = React.useState(false);
-  const [countFile, setCountFile] = React.useState(1);
   const [nameFile, setNameFile] = React.useState(GetCurrentDateTime);
   const [isExport, setIsExport] = React.useState(false);
   const { exportData } = React.useContext(Context);
+  const [baseString64, setBaseString64] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
   const handleOpen = () => {
     if(title === MSG_MENUBAR.titleExport) {
@@ -68,26 +77,56 @@ export default function ModalExpImp({children, title, subtitle}: any) {
 
   const handleClose = () => {
     setOpen(false);
+    setBaseString64('');
+    setLoading(false);
   }
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-  }
-
-  // const handleFile = (e: any) => {
-  //   setCountFile(e.target.files.length);
-  //   setNameFile(e.target.files[0].name);
-  // }
-
-  const onFileHandleUpload = (file: any) => {
-    console.log(`the file is ${file.base64}`);
     
+    if(baseString64.length > 0) {
+      setLoading(true);
+      /*
+      TODO: send file to server, but first, we need to check if the server, 
+            is ready to receive the file and check the response.
+      */
+      
+      // canais.sendFileCanais(baseString64)
+      //   .then(
+      //     (res: any) => {
+      //       if(res.status === 200) {
+      //         // alert(LABEL_MSG.success);
+      //         setLoading(false);
+      //         handleClose();
+      //       }
+      //     }
+      //   ).catch(
+      //     (err: any) => {
+      //       console.log(err);
+      //       setLoading(false);
+      //       handleClose();
+      //     }
+      //   );
+      setTimeout(() => {
+        console.log('this file was sent to server')
+        alert("Arquivo esta demorando para ser enviado, a janela se fechara automaticamente e nos avisaremos por aqui.")
+        handleClose();
+        setLoading(false);
+      }, 3000);
+      // console.log(`sending.... ${baseString64}`)
+    }
   }
   
-// TODO: check method for export data and import data, maybe use the same componet for both
+  const onFileHandleUpload = (file: any) => {
+    if(file){
+      setBaseString64(file.base64);
+    }
+  }
+  
   return (
     <div>
-        <Button onClick={handleOpen} sx={{color: '#F9DD17', textTransform: 'capitalize'}} variant='text'>
+        <Button onClick={handleOpen} 
+          sx={{color: '#F9DD17', textTransform: 'capitalize'}} variant='text'>
         {children}
         </Button>
       <Modal
@@ -105,7 +144,7 @@ export default function ModalExpImp({children, title, subtitle}: any) {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <Box sx={{display: 'flex', justifyContent: 'flex-end', marginBottom: '10%'}}>
                     <Typography sx={{paddingRight: '35%'}} id="transition-modal-title" variant="h6" component="h2">
                         {title} {subtitle}
@@ -121,7 +160,7 @@ export default function ModalExpImp({children, title, subtitle}: any) {
 
                         <TextField
                           id="rename-file"
-                          label="Nome do arquivo"
+                          label={LABEL_MSG.text_import}
                           type="search"
                           variant="standard"
                           onChange={handleChange}
@@ -129,7 +168,7 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                         </Box>
                       </Grid>
                       <Grid sx={{ marginLeft: '10%'}}>
-                        <ListFile countFile={countFile} nameFile={nameFile} />
+                        <ListFile countFile={1} nameFile={nameFile} />
                       </Grid>
                   </Grid>
                   ):(
@@ -149,10 +188,32 @@ export default function ModalExpImp({children, title, subtitle}: any) {
                       delimiter=','
                     />
               ):(
-                    <Button variant='outlined' sx={{color: 'white', mr: 5}} type="submit">{title}</Button>)}
-                    
-                    <Button variant='outlined' sx={{color: '#F9DD17'}} type="reset" onClick={handleClose}>{MSG_MENUBAR.close}</Button>
+                <>
+                {loading ? (
+                    <Grid sx={{marginRight: '5%'}}>
+
+                      <Waveform 
+                        size={30}
+                        lineWeight={3.5}
+                        speed={1} 
+                        color="#F9DD17" 
+                      />
+                    </Grid>
+
+                  ):(
+                  <Button 
+                    onClick={handleSubmit}
+                    variant='outlined' 
+                    sx={{color: 'white', mr: 5}} 
+                    >{title}</Button>
+                  )}
+                  
+
+                </>
+                )}   
+                  <Button variant='outlined' sx={{color: '#F9DD17'}} type="reset" onClick={handleClose}>{MSG_MENUBAR.close}</Button>
                 </Box>
+                
             </form>
           </Box>
         </Fade>

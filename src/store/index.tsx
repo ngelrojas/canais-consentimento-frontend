@@ -19,3 +19,10 @@ export const useTotalRegister = create<TotalRegisters>((set) => ({
   setTotalIn: (data) => set(() => ({ totalIn: data })),
   setTotalOut: (data) => set(() => ({ totalOut: data })),
 }));
+
+export const useSignInStore = create<LoginStore>((set) => ({
+  userName: '',
+  password: '',
+  resp: null,
+  setToken: (data) => set(() => ({ resp: data })),
+}));

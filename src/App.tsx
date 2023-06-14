@@ -8,9 +8,12 @@ const App = () => {
   return (
     <>
       <Layout>
-        <LoginOpt />
+        {/* 
+        verify if user is logged, if not, redirect to login page
+        do that for header and footer components
+         */}
         <Header />
-          <MainRoutes />
+        <MainRoutes />
         <Footer />
       </Layout>
     </>

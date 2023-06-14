@@ -3,7 +3,7 @@ import { IPATH } from '../services';
 
 const PATHS: IPATH[] = [
     {
-        url:'/',
+        url:'/home',
         exact: true,
         component: Home,
     },

@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { URL_API_GATEWAY } from './config';
 
-const URL_PROD=import.meta.env.VITE_APP_URL_CANAIS_API;
+const BASE_URL = URL_API_GATEWAY;
 
 export default axios.create({
-    baseURL: URL_PROD
+    baseURL: BASE_URL
 })

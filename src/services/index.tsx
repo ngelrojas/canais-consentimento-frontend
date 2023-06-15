@@ -138,3 +138,16 @@ export interface nameFileCSV {
 export interface FileUploadComponentProps {
     handleFileCSV: (file: nameFileCSV) => void;
 }
+
+export interface LoginFormValues {
+    username: string;
+    password: string;
+    profile?: [];
+}
+
+export interface AuthStore {
+    loggedIn: boolean;
+    username: string;
+    login: (username: string, password: string) => void;
+    logout: () => void;
+  };

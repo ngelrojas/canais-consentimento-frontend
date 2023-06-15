@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Canais } from '../services/service.canais';
-import { Login } from '../services/service.login';
+import { Login, SignIn } from '../services/service.login';
 import { useCanaisStore, useLoginStore } from '../store';
 import { LocalStorageService } from '../services/service.token';
+
 
 //TODO: before upload to dev or hml, server, remove .getFilterCanaiss replace to .getFilterCanais
 export const useFilterCanais = (filter: any) => {
@@ -22,7 +23,7 @@ export const useFilterCanais = (filter: any) => {
   return filterCanais;
 };
 
-export const useLogin = (userName: string, password: string) => {
+export const useLogin = (userName: any, password: any) => {
   const {resp, setToken } = useLoginStore();
   
   useEffect(()  => {

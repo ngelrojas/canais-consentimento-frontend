@@ -2,12 +2,22 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import Typography from '@mui/material/Typography';
-import { AiOutlineDownload } from "react-icons/ai";
-import { AiOutlineUpload } from "react-icons/ai";
+import { AiOutlineDownload, AiOutlineUpload, AiOutlineLogout } from "react-icons/ai";
 import { Span, Main } from '../../styles/menus.style';
 import ModalExpImp from '../modalExIm';
 import { MSG_MENUBAR } from '../../constants';
+import { useAuthStore } from '../../store';
+import { useNavigate } from 'react-router-dom';
+import { LogoutContainer } from './styles';
+
 export default function MenuNavBar() {
+  const { logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  }
 
   return (
     <AppBar position="static" sx={{backgroundColor: '#F9DD17', width: 'auto'}}>
@@ -60,24 +70,37 @@ export default function MenuNavBar() {
             <Box sx={{
                 width: '100%', 
                 display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'left',
                 backgroundColor: '#0038A7',
                 textTransform: 'capitalize',
-                paddingLeft: '8%',
+                paddingLeft: '7%',
                 '& > :not(style) + :not(style)': {
-                  ml: 4,
+                  ml: 7,
                 },
               }}>
-              
-              <ModalExpImp title={MSG_MENUBAR.titleImport} subtitle={MSG_MENUBAR.titleMailing}>
-                <AiOutlineDownload fontSize={25} /> <Span>{MSG_MENUBAR.titleImport} {MSG_MENUBAR.titleMailing}</Span>
-              </ModalExpImp>
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}>
+                <ModalExpImp title={MSG_MENUBAR.titleImport} subtitle={MSG_MENUBAR.titleMailing}>
+                  <AiOutlineDownload fontSize={25} /> <Span>{MSG_MENUBAR.titleImport} {MSG_MENUBAR.titleMailing}</Span>
+                </ModalExpImp>
 
-              <ModalExpImp title={MSG_MENUBAR.titleExport} subtitle={MSG_MENUBAR.titleMailing}>
-                <AiOutlineUpload fontSize={25} /> <Span>{MSG_MENUBAR.titleExport} {MSG_MENUBAR.titleMailing}</Span>
-              </ModalExpImp>
+                <ModalExpImp title={MSG_MENUBAR.titleExport} subtitle={MSG_MENUBAR.titleMailing}>
+                  <AiOutlineUpload fontSize={25} /> <Span>{MSG_MENUBAR.titleExport} {MSG_MENUBAR.titleMailing}</Span>
+                </ModalExpImp>
+              </Box>
               
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                paddingLeft: '72%',
+              }}>
+                <LogoutContainer onClick={handleLogout}>
+                  <AiOutlineLogout fontSize={22} />
+                </LogoutContainer>
+              </Box>
             </Box>
           </Box>
         </Main>

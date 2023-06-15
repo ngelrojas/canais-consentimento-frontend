@@ -1,6 +1,6 @@
 export class LocalStorageService {
     
-    public setItem(key: string, value: string): void{
+    public setItem(key: string, value: any): void{
         localStorage.setItem(key, value);
     }
 
@@ -17,10 +17,3 @@ export class LocalStorageService {
     }
 
 }
-
-// const localStorageService = new LocalStorageService();
-// localStorageService.setItem("myKey", "myValue");
-// const value = localStorageService.getItem("myKey");
-// console.log(value); // "myValue"
-// localStorageService.removeItem("myKey");
-// localStorageService.clear();

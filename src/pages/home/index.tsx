@@ -16,9 +16,8 @@ export default function Home () {
     const navigate = useNavigate();
 
     useEffect(() => {
-
-        if (!authIn) {
-            navigate('/');
+        if (!authIn === true) {
+            navigate('/login');
         }
     }, [authIn]);
 

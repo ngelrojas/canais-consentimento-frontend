@@ -30,12 +30,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
   username: '',
   login: (username: string, password: string) => {
     let authIn = new Login(username, password);
+    
     authIn.getSignInn().then((resp: any) => {
       set({ loggedIn: true, username: resp.data.profiles[0] });
-      
+      localStorage.setItem("errorLogin", false);
       localStorage.setItem("loggedIn", true);
     }).catch((err) => {
       set({ loggedIn: false, username: `${err}` });
+      localStorage.setItem("errorLogin", true);
     })
 
   },

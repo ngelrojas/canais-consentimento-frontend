@@ -109,3 +109,15 @@ export const MODAL_MSG_TEXT = {
 export const LABEL_MSG = {
     text_import: 'Renomear arquivo',
 }
+
+export const LABEL_MSG_LOGIN = {
+    errorLogin: 'Usuário ou senha inválidos',
+    btn_txt_login: 'ENTRAR',
+    field_user: 'Usuário',
+    field_password: 'Senha',
+}
+
+export const LABEL_COPY_RIGHT = {
+    company: 'BrasilSeg',
+    copyRight: 'Copyright © ',
+}

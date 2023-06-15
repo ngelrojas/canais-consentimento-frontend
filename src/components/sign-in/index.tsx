@@ -11,11 +11,11 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useLogin, useSignIn } from '../../hooks';
-import { CREDENTIALS } from '../../constants';
+import { LoginFormValues } from '../../services';
+import { useStore } from 'zustand';
+import { useAuthStore } from '../../store';
+import  { useNavigate }  from 'react-router-dom';
 import { LocalStorageService } from '../../services/service.token';
-import { set } from 'react-hook-form';
 
 function Copyright(props: any) {
   return (
@@ -31,26 +31,29 @@ function Copyright(props: any) {
 }
 
 export default function SignIn() {
-    const [userName, setUserName] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const response = useSignIn(userName, password);
+  
+  const navigate = useNavigate();
+  const { loggedIn, login, logout } = useAuthStore();
+  const localStorage = new LocalStorageService();
+  const authIn = localStorage.getItem('loggedIn');
+  
     
-    const localStorageService = new LocalStorageService();
-    console.log('HERE LOGIN ',response);
-    const profile = response ? response[0] : '';
-    localStorageService.setItem('profile', profile);
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    setUserName(data.get('email') as string);
-    setPassword(data.get('password') as string);
-
+    
+    login(data.get('email') as string, data.get('password') as string);
+    
   };
+
+  
+  React.useEffect(() => {
+
+    if (authIn) {
+      navigate('/home');
+    }
+
+  }, [authIn]);
 
   return (
     <Container >

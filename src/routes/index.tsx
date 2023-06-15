@@ -7,6 +7,7 @@ const MainRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="/login" element={<SignIn />} />
                 <Route path="/" element={<SignIn />} />
                 {
                     PATHS.map((path, index) => {

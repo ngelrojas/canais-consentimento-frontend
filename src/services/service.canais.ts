@@ -32,7 +32,7 @@ export class Canais {
         });
         return this.response;
     }
-
+    // TODO: delete this method when get a production api
     public async getFilterCanaiss (filter: any) {
         this.response = await API.get(`/search`);
         return this.response; 

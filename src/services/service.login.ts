@@ -1,5 +1,6 @@
 import API from '../api';
 import { PATH } from '../constants';
+import { PATH_LOGIN_PLATFORM, PATH_OAUTH_LOGIN_API } from '../api/config';
 import axios from 'axios';
 
 export class Login {
@@ -12,41 +13,41 @@ export class Login {
         this.password = password;
     }
 
+    /**
+     * @description: Retorna o token de acesso da API
+     * **/
+    //TODO: change name getToken to getLogin
     public async getToken () {
-        this.response = await API.post(PATH.urlLogin, {
+        this.response = await API.post(PATH_OAUTH_LOGIN_API, {
             userName: this.userName,
             password: this.password
         });
         return this.response; 
     }
-}
 
-export class SignIn {
-    private userName: String;
-    private password: String;
-    private response: any;
-
-    constructor(userName: String, password: String) {
-        this.userName = userName;
-        this.password = password;
-    }
-
-    public async getProfile(){
-        // this.response = await API.get(PATH.urlGroup);
-        // return this.response;
-        // return ['GroupFrontend', 'GroupBackend', 'GroupMobile'];
-        this.response = axios.post('https://dummyjson.com/auth/login', {
-            username: this.userName,
+    /**
+     * @description: Retorna o profile do usuario logado na area administrativa
+     * **/
+    public async getSignIn () {
+        this.response = await API.post(PATH_LOGIN_PLATFORM, {
+            userName: this.userName,
             password: this.password
-        })
-        return this.response;
+        });
+        return this.response; 
     }
-}
 
-// export const getToken = async (userName: string, password: string) => {
-//   const response = await API.post(PATH.urlLogin, {
-//     userName,
-//     password,
-//   });
-//   return response;
-// };
+    /*
+    * TODO: method below is just for test
+    */
+   public async getSignInn () {
+        let groups = {};
+        
+        groups = {
+            "data": {
+                    "profiles": ['GroupFrontend', 'GroupBackend', 'GroupMobile']
+            }
+        };
+        
+        return groups;
+   }
+}
